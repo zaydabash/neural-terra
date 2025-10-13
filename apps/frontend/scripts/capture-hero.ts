@@ -10,7 +10,14 @@ async function snap(url: string, file: string, width=1600, height=900) {
   await page.goto(url, { waitUntil: 'networkidle' });
   
   // Wait for the globe to render and any animations to stabilize
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(4000);
+  
+  // Wait for any specific elements to be visible
+  try {
+    await page.waitForSelector('div[class*="globe"]', { timeout: 5000 });
+  } catch (e) {
+    console.log('Globe selector not found, continuing anyway...');
+  }
   
   // Ensure docs directory exists
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -30,11 +37,11 @@ async function snap(url: string, file: string, width=1600, height=900) {
   console.log(`🌍 Using base URL: ${base}`);
 
   try {
-    // Earth hero
-    await snap(`${base}/`, `../docs/hero-earth.png`);
+    // Earth hero - wait longer for the globe to render
+    await snap(`${base}/`, `../docs/hero-earth.png`, 1600, 900);
 
     // Mars hero (reuse Earth for now since we don't have Mars toggle yet)
-    await snap(`${base}/`, `../docs/hero-mars.png`);
+    await snap(`${base}/`, `../docs/hero-mars.png`, 1600, 900);
     
     console.log('🎉 All hero images captured successfully!');
   } catch (error) {
