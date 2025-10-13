@@ -1,0 +1,17 @@
+{
+  "scenario_id": "la_port_shutdown_24h",
+  "name": "LA Port 24h Shutdown",
+  "description": "Simulate complete shutdown of Los Angeles port for 24 hours",
+  "shock": {
+    "target_ids": ["los_angeles"],
+    "magnitude": 1.0,
+    "duration_hours": 24,
+    "start_ts": "2024-01-15T00:00:00Z"
+  },
+  "expected_effects": [
+    "Massive shipping backlog",
+    "Rerouting to Long Beach",
+    "Trans-Pacific trade disruption",
+    "Supply chain delays"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scenario_id": "launch_delay",
+  "name": "Launch Pad Delay",
+  "description": "Launch pad maintenance causing 12-hour delays",
+  "shock": {
+    "target_ids": ["launch_pad"],
+    "magnitude": 0.8,
+    "duration_hours": 12,
+    "start_ts": "2024-01-15T00:00:00Z"
+  },
+  "expected_effects": [
+    "Supply chain disruptions",
+    "Resource stockpiling at colonies",
+    "Emergency protocols activated",
+    "Communication delays with Earth"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scenario_id": "eu_heatwave_3d",
+  "name": "European Heatwave +3°C",
+  "description": "Simulate 3°C temperature increase in Europe for 3 days",
+  "shock": {
+    "target_ids": ["eu_central", "eu_north"],
+    "magnitude": 0.6,
+    "duration_hours": 72,
+    "start_ts": "2024-01-15T00:00:00Z"
+  },
+  "expected_effects": [
+    "Increased air conditioning demand",
+    "Higher energy consumption",
+    "Grid stress warnings",
+    "Potential brownouts"
+  ]
+}

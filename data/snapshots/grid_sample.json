@@ -1,0 +1,82 @@
+[
+  {
+    "id": "us_east",
+    "name": "US Eastern Interconnection",
+    "region": "North America",
+    "capacity_mw": 500000,
+    "load_mw": 420000,
+    "stress_index": 0.84
+  },
+  {
+    "id": "us_west",
+    "name": "US Western Interconnection",
+    "region": "North America",
+    "capacity_mw": 200000,
+    "load_mw": 180000,
+    "stress_index": 0.90
+  },
+  {
+    "id": "eu_central",
+    "name": "European Continental Grid",
+    "region": "Europe",
+    "capacity_mw": 400000,
+    "load_mw": 350000,
+    "stress_index": 0.875
+  },
+  {
+    "id": "eu_north",
+    "name": "Nordic Grid",
+    "region": "Europe",
+    "capacity_mw": 80000,
+    "load_mw": 65000,
+    "stress_index": 0.81
+  },
+  {
+    "id": "china_east",
+    "name": "China Eastern Grid",
+    "region": "Asia",
+    "capacity_mw": 600000,
+    "load_mw": 520000,
+    "stress_index": 0.87
+  },
+  {
+    "id": "china_west",
+    "name": "China Western Grid",
+    "region": "Asia",
+    "capacity_mw": 300000,
+    "load_mw": 250000,
+    "stress_index": 0.83
+  },
+  {
+    "id": "india_north",
+    "name": "Northern Regional Grid",
+    "region": "Asia",
+    "capacity_mw": 150000,
+    "load_mw": 140000,
+    "stress_index": 0.93
+  },
+  {
+    "id": "india_south",
+    "name": "Southern Regional Grid",
+    "region": "Asia",
+    "capacity_mw": 120000,
+    "load_mw": 110000,
+    "stress_index": 0.92
+  },
+  {
+    "id": "japan",
+    "name": "Japan Grid",
+    "region": "Asia",
+    "capacity_mw": 200000,
+    "load_mw": 180000,
+    "stress_index": 0.90
+  },
+  {
+    "id": "australia",
+    "name": "Australian National Grid",
+    "region": "Oceania",
+    "capacity_mw": 50000,
+    "load_mw": 42000,
+    "stress_index": 0.84
+  }
+]

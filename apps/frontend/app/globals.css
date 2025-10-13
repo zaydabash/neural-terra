@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-900 text-white;
+  }
+}
+
+@layer components {
+  .globe-container {
+    @apply w-full h-full relative;
+  }
+  
+  .control-panel {
+    @apply absolute top-4 left-4 bg-gray-800/90 backdrop-blur-sm rounded-lg p-4 shadow-lg;
+  }
+  
+  .layer-toggle {
+    @apply flex items-center space-x-2 p-2 rounded hover:bg-gray-700 transition-colors;
+  }
+  
+  .scenario-button {
+    @apply px-4 py-2 bg-neural-blue hover:bg-blue-600 text-white rounded-lg transition-colors;
+  }
+  
+  .ripple-effect {
+    @apply absolute rounded-full pointer-events-none;
+    animation: ripple 2s ease-out infinite;
+  }
+}

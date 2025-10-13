@@ -1,0 +1,52 @@
+[
+  {
+    "id": "oxygen_failure_alert",
+    "ts": "2024-01-15T08:00:00Z",
+    "title": "COLONY ALPHA OXYGEN FAILURE",
+    "summary": "Oxygen grid stress at critical levels - immediate intervention required",
+    "severity": "critical",
+    "tags": ["life_support", "oxygen", "colony"],
+    "region_ids": ["Mars"],
+    "asset_ids": ["colony_alpha", "oxygen_grid"]
+  },
+  {
+    "id": "dust_storm_warning",
+    "ts": "2024-01-15T06:00:00Z",
+    "title": "Martian Dust Storm Alert",
+    "summary": "Global dust storm approaching - solar efficiency reduced by 40%",
+    "severity": "high",
+    "tags": ["weather", "dust_storm", "solar"],
+    "region_ids": ["Mars"],
+    "asset_ids": ["solar_farm"]
+  },
+  {
+    "id": "launch_delay",
+    "ts": "2024-01-15T04:00:00Z",
+    "title": "Launch Pad Maintenance",
+    "summary": "Scheduled maintenance causing 12-hour launch delays",
+    "severity": "medium",
+    "tags": ["transport", "maintenance", "launch"],
+    "region_ids": ["Mars"],
+    "asset_ids": ["launch_pad"]
+  },
+  {
+    "id": "water_shortage",
+    "ts": "2024-01-15T02:00:00Z",
+    "title": "Water Processing Plant Overload",
+    "summary": "Water recycling system operating at 90% capacity",
+    "severity": "medium",
+    "tags": ["life_support", "water", "recycling"],
+    "region_ids": ["Mars"],
+    "asset_ids": ["water_plant"]
+  },
+  {
+    "id": "terraforming_progress",
+    "ts": "2024-01-15T00:00:00Z",
+    "title": "Terraforming Progress Update",
+    "summary": "Atmospheric pressure increased by 0.1% - CO₂ conversion accelerating",
+    "severity": "low",
+    "tags": ["terraforming", "atmosphere", "progress"],
+    "region_ids": ["Mars"],
+    "asset_ids": []
+  }
+]

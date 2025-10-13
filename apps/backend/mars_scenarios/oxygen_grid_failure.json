@@ -1,0 +1,17 @@
+{
+  "scenario_id": "oxygen_grid_failure",
+  "name": "Oxygen Grid Failure",
+  "description": "50% oxygen grid failure at Colony Alpha",
+  "shock": {
+    "target_ids": ["oxygen_grid"],
+    "magnitude": 0.5,
+    "duration_hours": 48,
+    "start_ts": "2024-01-15T00:00:00Z"
+  },
+  "expected_effects": [
+    "Colony Alpha oxygen levels critical",
+    "Emergency protocols activated",
+    "Backup systems engaged",
+    "Resource allocation redirected"
+  ]
+}

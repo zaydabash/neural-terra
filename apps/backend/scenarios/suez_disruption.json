@@ -1,0 +1,17 @@
+{
+  "scenario_id": "suez_disruption_7d",
+  "name": "Suez Canal 40% Slowdown",
+  "description": "Simulate 40% slowdown in Suez Canal for 7 days",
+  "shock": {
+    "target_ids": ["suez_canal"],
+    "magnitude": 0.4,
+    "duration_hours": 168,
+    "start_ts": "2024-01-15T00:00:00Z"
+  },
+  "expected_effects": [
+    "Increased shipping delays in Europe",
+    "Rerouting through alternative routes",
+    "Higher fuel costs",
+    "Supply chain disruptions"
+  ]
+}

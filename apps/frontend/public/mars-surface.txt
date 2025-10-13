@@ -1,0 +1,4 @@
+# Mars Surface Texture Placeholder
+# This file serves as a placeholder for the Mars surface texture
+# In a real implementation, you would add a proper Mars surface image here
+# The CesiumJS component will fall back to a red atmosphere if this image is not found

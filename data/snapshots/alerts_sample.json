@@ -1,0 +1,52 @@
+[
+  {
+    "id": "panama_drought_2024",
+    "ts": "2024-01-15T10:00:00Z",
+    "title": "Panama Canal Drought Restrictions",
+    "summary": "Water levels at historic lows, restricting ship passages",
+    "severity": "high",
+    "tags": ["shipping", "drought", "infrastructure"],
+    "region_ids": ["Central America"],
+    "asset_ids": ["panama_canal"]
+  },
+  {
+    "id": "eu_heatwave_2024",
+    "ts": "2024-01-15T06:00:00Z",
+    "title": "European Heatwave Alert",
+    "summary": "Temperatures 3°C above normal across Western Europe",
+    "severity": "medium",
+    "tags": ["weather", "heatwave", "energy"],
+    "region_ids": ["Europe"],
+    "asset_ids": ["eu_central", "eu_north"]
+  },
+  {
+    "id": "california_grid_stress",
+    "ts": "2024-01-15T00:00:00Z",
+    "title": "California Grid Stress Warning",
+    "summary": "High demand expected due to air conditioning load",
+    "severity": "medium",
+    "tags": ["energy", "grid", "demand"],
+    "region_ids": ["North America"],
+    "asset_ids": ["us_west"]
+  },
+  {
+    "id": "suez_traffic_delay",
+    "ts": "2024-01-14T18:00:00Z",
+    "title": "Suez Canal Traffic Delays",
+    "summary": "Increased wait times due to maintenance work",
+    "severity": "low",
+    "tags": ["shipping", "maintenance", "delays"],
+    "region_ids": ["Middle East"],
+    "asset_ids": ["suez_canal"]
+  },
+  {
+    "id": "china_manufacturing_surge",
+    "ts": "2024-01-14T12:00:00Z",
+    "title": "Chinese Manufacturing Surge",
+    "summary": "Increased production driving higher energy consumption",
+    "severity": "low",
+    "tags": ["manufacturing", "energy", "production"],
+    "region_ids": ["Asia"],
+    "asset_ids": ["china_east", "china_west"]
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "panama_canal",
+    "name": "Panama Canal",
+    "lat": 9.0765,
+    "lon": -79.6555,
+    "throughput_index": 0.95,
+    "region": "Central America"
+  },
+  {
+    "id": "suez_canal",
+    "name": "Suez Canal",
+    "lat": 30.5852,
+    "lon": 32.2650,
+    "throughput_index": 0.90,
+    "region": "Middle East"
+  },
+  {
+    "id": "los_angeles",
+    "name": "Port of Los Angeles",
+    "lat": 33.7175,
+    "lon": -118.2728,
+    "throughput_index": 0.85,
+    "region": "North America"
+  },
+  {
+    "id": "long_beach",
+    "name": "Port of Long Beach",
+    "lat": 33.7701,
+    "lon": -118.1937,
+    "throughput_index": 0.80,
+    "region": "North America"
+  },
+  {
+    "id": "rotterdam",
+    "name": "Port of Rotterdam",
+    "lat": 51.9225,
+    "lon": 4.4792,
+    "throughput_index": 0.88,
+    "region": "Europe"
+  },
+  {
+    "id": "singapore",
+    "name": "Port of Singapore",
+    "lat": 1.2966,
+    "lon": 103.7764,
+    "throughput_index": 0.92,
+    "region": "Asia"
+  },
+  {
+    "id": "shanghai",
+    "name": "Port of Shanghai",
+    "lat": 31.2304,
+    "lon": 121.4737,
+    "throughput_index": 0.90,
+    "region": "Asia"
+  },
+  {
+    "id": "hamburg",
+    "name": "Port of Hamburg",
+    "lat": 53.5511,
+    "lon": 9.9937,
+    "throughput_index": 0.75,
+    "region": "Europe"
+  },
+  {
+    "id": "antwerp",
+    "name": "Port of Antwerp",
+    "lat": 51.2194,
+    "lon": 4.4025,
+    "throughput_index": 0.78,
+    "region": "Europe"
+  },
+  {
+    "id": "busan",
+    "name": "Port of Busan",
+    "lat": 35.1796,
+    "lon": 129.0756,
+    "throughput_index": 0.82,
+    "region": "Asia"
+  }
+]

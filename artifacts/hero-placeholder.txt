@@ -1,0 +1,11 @@
+ Neural Terra Hero Image Placeholder
+
+This would show:
+- Cinematic 3D Earth globe with atmospheric effects
+- Weather layer active (blue temperature heatmap)
+- Ports layer active (green shipping routes)
+- Suez Canal scenario running with orange ripple effects
+- Professional dark theme with glowing UI elements
+- Timeline showing simulation progress
+
+To generate actual hero image: make capture-hero

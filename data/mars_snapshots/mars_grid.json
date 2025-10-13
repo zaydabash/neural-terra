@@ -1,0 +1,56 @@
+[
+  {
+    "id": "colony_alpha",
+    "name": "Colony Alpha",
+    "region": "Mars",
+    "capacity_mw": 50000,
+    "load_mw": 35000,
+    "stress_index": 0.70,
+    "type": "colony"
+  },
+  {
+    "id": "colony_bravo",
+    "name": "Colony Bravo",
+    "region": "Mars",
+    "capacity_mw": 30000,
+    "load_mw": 25000,
+    "stress_index": 0.83,
+    "type": "colony"
+  },
+  {
+    "id": "oxygen_grid",
+    "name": "Oxygen Grid",
+    "region": "Mars",
+    "capacity_mw": 80000,
+    "load_mw": 60000,
+    "stress_index": 0.75,
+    "type": "life_support"
+  },
+  {
+    "id": "water_plant",
+    "name": "Water Processing Plant",
+    "region": "Mars",
+    "capacity_mw": 20000,
+    "load_mw": 18000,
+    "stress_index": 0.90,
+    "type": "life_support"
+  },
+  {
+    "id": "launch_pad",
+    "name": "Launch Pad Alpha",
+    "region": "Mars",
+    "capacity_mw": 100000,
+    "load_mw": 45000,
+    "stress_index": 0.45,
+    "type": "transport"
+  },
+  {
+    "id": "solar_farm",
+    "name": "Solar Farm Delta",
+    "region": "Mars",
+    "capacity_mw": 120000,
+    "load_mw": 95000,
+    "stress_index": 0.79,
+    "type": "power"
+  }
+]

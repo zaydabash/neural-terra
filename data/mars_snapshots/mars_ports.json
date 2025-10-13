@@ -1,0 +1,47 @@
+[
+  {
+    "id": "colony_alpha",
+    "name": "Colony Alpha",
+    "lat": 18.4,
+    "lon": 77.5,
+    "throughput_index": 0.85,
+    "region": "Mars",
+    "type": "colony"
+  },
+  {
+    "id": "colony_bravo",
+    "name": "Colony Bravo",
+    "lat": -14.6,
+    "lon": 175.5,
+    "throughput_index": 0.70,
+    "region": "Mars",
+    "type": "colony"
+  },
+  {
+    "id": "launch_pad",
+    "name": "Launch Pad Alpha",
+    "lat": 0.0,
+    "lon": 0.0,
+    "throughput_index": 0.95,
+    "region": "Mars",
+    "type": "transport"
+  },
+  {
+    "id": "mining_station",
+    "name": "Mining Station Beta",
+    "lat": 25.0,
+    "lon": 310.0,
+    "throughput_index": 0.60,
+    "region": "Mars",
+    "type": "resource"
+  },
+  {
+    "id": "research_lab",
+    "name": "Research Lab Gamma",
+    "lat": -5.0,
+    "lon": 137.4,
+    "throughput_index": 0.40,
+    "region": "Mars",
+    "type": "research"
+  }
+]
