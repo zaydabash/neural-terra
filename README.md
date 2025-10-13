@@ -50,7 +50,7 @@ A real-time, AI-powered, interactive digital twin of Earth that lets you simulat
 | Scenario | Command | Impact |
 |----------|---------|--------|
 | **Suez Disruption** | `"Simulate 40% slowdown in Suez Canal for 7 days"` | Global shipping impact |
-| **EU Heatwave** | `"What happens if Europe heats up 3 C?"` | Grid stress cascade |
+| **EU Heatwave** | `"What happens if Europe heats up 3°C?"` | Grid stress cascade |
 | **LA Port Shutdown** | `"Complete LA port closure for 24 hours"` | Trans-Pacific disruption |
 | **Panama Drought** | `"Panama Canal water levels drop 50%"` | Supply chain collapse |
 | **Mars Oxygen Failure** | `"Simulate 50% oxygen failure at Colony Alpha"` | Critical life support cascade |
