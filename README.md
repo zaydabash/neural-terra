@@ -37,7 +37,7 @@ A real-time, AI-powered, interactive digital twin of Earth that lets you simulat
 
 <div align="center">
 
-![Neural Terra Hero](docs/docs/hero-earth.png)
+![Neural Terra Hero](earth.png)
 
 *Simulate global disruptions and watch ripple effects propagate across Earth's interconnected systems*
 
@@ -123,7 +123,7 @@ make dev
 
 <div align="center">
 
-![Mars Mode Hero](docs/docs/hero-mars.png)
+![Mars Mode Hero](mars.png)
 
 ### Neural Mars   The Red Planet Simulation
 
