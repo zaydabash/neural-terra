@@ -251,10 +251,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- **CesiumJS** for the incredible 3D globe visualization
-- **FastAPI** for the lightning-fast backend framework
+- **CesiumJS** for the 3D globe visualization
+- **FastAPI** for the backend framework
 - **NetworkX** for the graph-based simulation engine
-- **The open-source community** for making this possible
 
 ---
 
