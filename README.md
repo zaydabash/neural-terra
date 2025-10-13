@@ -68,7 +68,7 @@ cd neural-terra
 # Start the full stack
 make dev
 
-# Open http://localhost:3000
+# Open http://localhost:3000 or https://neural-terra-8fjvtnrm0-zs-projects-f6d2059b.vercel.app
 ```
 
 **30-second demo:**
