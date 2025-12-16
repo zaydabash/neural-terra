@@ -68,7 +68,17 @@ cd neural-terra
 # Start the full stack
 make dev
 
-# Open http://localhost:3000 or https://neural-terra-8fjvtnrm0-zs-projects-f6d2059b.vercel.app
+# Or run services manually:
+# Backend (FastAPI ripple engine)
+cd apps/backend
+uvicorn main:app --reload --port 8000
+
+# Frontend (Next.js)
+cd ../frontend
+export NEXT_PUBLIC_API_URL=http://localhost:8000
+npm run dev
+
+# Open http://localhost:3000
 ```
 
 **30-second demo:**

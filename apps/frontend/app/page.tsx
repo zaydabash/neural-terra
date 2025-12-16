@@ -6,6 +6,7 @@ import GlobeViewer from '@/components/GlobeViewer'
 import ScenarioDrawer from '@/components/ScenarioDrawer'
 import Timeline from '@/components/Timeline'
 import NLCommandBar from '@/components/NLCommandBar'
+import SimulationResults from '@/components/SimulationResults'
 
 export default function Home() {
   return (
@@ -15,6 +16,11 @@ export default function Home() {
       {/* Control Panel */}
       <div className="absolute left-4 top-16 w-80 z-20">
         <ControlPanel />
+      </div>
+
+      {/* Simulation results */}
+      <div className="absolute right-4 top-16 w-80 z-20">
+        <SimulationResults />
       </div>
 
       {/* Globe Visualization */}

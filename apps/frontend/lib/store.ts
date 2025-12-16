@@ -79,7 +79,7 @@ export const useGlobeStore = create<GlobeStore>()(
       isPlaying: false,
 
       // Connection state
-      isConnected: true, // Will be updated based on actual connection
+      isConnected: true, // Updated based on backend health
 
       // Actions
       runScenario: async (scenarioId: string) => {
@@ -100,7 +100,7 @@ export const useGlobeStore = create<GlobeStore>()(
           }
 
           const data = await response.json()
-          
+
           set({
             simulationData: {
               scenarioId: data.scenario_id,
@@ -111,10 +111,41 @@ export const useGlobeStore = create<GlobeStore>()(
             simulationDuration: data.duration_hours,
             currentTime: 0,
             isPlaying: true,
+            isConnected: true,
           })
         } catch (error) {
           console.error('Scenario execution failed:', error)
-          throw error
+
+          // Offline demo fallback: synthesize a simple impact pattern
+          const fallbackImpactSeries: Record<string, number[]> = {
+            suez_canal: Array.from({ length: 169 }, (_, i) =>
+              i === 0 ? 0 : Math.min(1, 0.4 + i * 0.003)
+            ),
+            rotterdam: Array.from({ length: 169 }, (_, i) =>
+              i === 0 ? 0 : Math.min(1, 0.3 + i * 0.0025)
+            ),
+            eu_central: Array.from({ length: 169 }, (_, i) =>
+              i === 0 ? 0 : Math.min(1, 0.25 + i * 0.002)
+            ),
+          }
+
+          set({
+            simulationData: {
+              scenarioId: `demo_${scenarioId}`,
+              impactSeries: fallbackImpactSeries,
+              kpis: {
+                global_trade_index_delta: 0.7,
+                regional_energy_stress_delta: 0.5,
+                peak_impact: 0.7,
+                peak_impact_time_hours: 24,
+              },
+              duration: 168,
+            },
+            simulationDuration: 168,
+            currentTime: 0,
+            isPlaying: true,
+            isConnected: false,
+          })
         }
       },
 
@@ -133,7 +164,7 @@ export const useGlobeStore = create<GlobeStore>()(
           }
 
           const data = await response.json()
-          
+
           if (data.simulation_result) {
             set({
               simulationData: {
@@ -145,11 +176,14 @@ export const useGlobeStore = create<GlobeStore>()(
               simulationDuration: data.simulation_result.duration_hours,
               currentTime: 0,
               isPlaying: true,
+              isConnected: true,
             })
           }
         } catch (error) {
           console.error('NL query failed:', error)
-          throw error
+
+          // NL offline: keep existing simulation state but mark as disconnected
+          set({ isConnected: false })
         }
       },
 

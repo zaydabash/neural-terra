@@ -21,6 +21,15 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           CI: 1
         run: cd apps/frontend && npm run build
+      - name: Install Playwright browsers
+        working-directory: apps/frontend
+        run: npx playwright install --with-deps
+      - name: Run frontend e2e test (vertical slice)
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          CI: 1
+        working-directory: apps/frontend
+        run: npx playwright test
 
   backend:
     runs-on: ubuntu-latest
