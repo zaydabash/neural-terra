@@ -70,12 +70,12 @@ export default function SimpleWorkingGlobe() {
 
       {/* Status indicator */}
       <div className="absolute top-4 left-4 bg-green-800/90 text-green-200 px-3 py-1 rounded text-sm">
-        ✅ Interactive Globe Active
+        Interactive Globe Active
       </div>
 
       {/* Controls hint */}
       <div className="absolute bottom-4 left-4 bg-blue-800/90 text-blue-200 px-3 py-1 rounded text-sm">
-        🌍 Real-time Earth Simulation
+        Real-time Earth Simulation
       </div>
     </div>
   )

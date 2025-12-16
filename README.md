@@ -33,11 +33,11 @@ A real-time, AI-powered, interactive digital twin of Earth that lets you simulat
 
 ---
 
-## Hero Demo
+## Hero Demo (Current UI)
 
 <div align="center">
 
-![Neural Terra Hero](docs/docs/hero-earth.png)
+![Neural Terra Hero](docs/hero-earth.png)
 
 *Simulate global disruptions and watch ripple effects propagate across Earth's interconnected systems*
 
@@ -62,7 +62,7 @@ A real-time, AI-powered, interactive digital twin of Earth that lets you simulat
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/neural-terra.git
+git clone https://github.com/zaydabash/neural-terra.git
 cd neural-terra
 
 # Start the full stack
@@ -119,11 +119,11 @@ make dev
 
 ---
 
-## Mars Mode (Live Preview)
+## Mars Mode (Preview)
 
 <div align="center">
 
-![Mars Mode Hero](docs/docs/hero-mars.png)
+![Mars Mode Hero](docs/hero-mars.png)
 
 ### Neural Mars   The Red Planet Simulation
 
@@ -140,7 +140,7 @@ Live Mars Scenarios:
 - `"Simulate 50% oxygen failure at Colony Alpha"`   Critical life support cascade
 - `"Launch pad maintenance delay for 12 hours"`   Supply chain disruption
 
-*Mars Mode v2.0 Preview   Full terraforming simulation coming soon.*
+*Mars Mode v2.0 Preview   Full terraforming simulation not implemented yet in this repository.*
 
 </div>
 
@@ -195,6 +195,18 @@ make capture-hero
 # Full CI pipeline
 make ci
 ```
+
+---
+
+## Current Status
+
+- **Frontend**: Next.js app with a working canvas globe, CesiumJS Google-Earth-style globe, scenario drawer, timeline, and natural-language command bar.
+- **Backend**: FastAPI service with ripple engine, agents loading snapshot data (ports, grid, weather, alerts), and `/simulate` plus `/nl/run` endpoints.
+- **Scenarios**: A small set of predefined Earth scenarios (Suez disruption, EU heatwave, LA port shutdown) wired to the backend ripple engine. Mars scenarios are UI-only placeholders.
+- **Data**: Uses bundled snapshot JSONs rather than live data feeds.
+- **Simulation**: Rules-based ripple engine with synthetic but structured dynamics. Not calibrated to real-world forecasts or operational decision-making.
+
+This is an in-progress prototype, not a production digital twin. The README sections below describe the intended direction; the list above is the honest description of what actually runs today.
 
 ---
 
@@ -261,6 +273,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built for the future of planetary simulation**
 
-[Try Neural Terra](https://neural-terra-8fjvtnrm0-zs-projects-f6d2059b.vercel.app)   [Read the Docs](#)   [View on GitHub](https://github.com/your-username/neural-terra)
+[Try Neural Terra](https://neural-terra-8fjvtnrm0-zs-projects-f6d2059b.vercel.app)   [Read the Docs](#)   [View on GitHub](https://github.com/zaydabash/neural-terra)
 
 </div>

@@ -43,6 +43,7 @@ interface GlobeStore {
   togglePlayback: () => void
   setCurrentTime: (time: number) => void
   resetSimulation: () => void
+  advanceTime: () => void
 }
 
 export const useGlobeStore = create<GlobeStore>()(
@@ -157,6 +158,13 @@ export const useGlobeStore = create<GlobeStore>()(
 
       setCurrentTime: (time: number) =>
         set({ currentTime: Math.max(0, Math.min(time, get().simulationDuration)) }),
+
+      advanceTime: () =>
+        set((state) => {
+          if (!state.isPlaying || !state.simulationData) return state
+          const next = Math.min(state.simulationDuration, state.currentTime + 1)
+          return { ...state, currentTime: next }
+        }),
 
       resetSimulation: () =>
         set({

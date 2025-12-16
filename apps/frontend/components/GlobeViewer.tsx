@@ -1,15 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useSimStore } from '@/store/sim'
+import { useGlobeStore } from '@/lib/store'
 
 export default function GlobeViewer() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   
-  const planet = useSimStore(s => s.planet)
-  const active = useSimStore(s => s.active)
-  const impacts = useSimStore(s => s.impacts)
+  const planet = useGlobeStore(s => s.currentPlanet)
+  const active = useGlobeStore(s => s.activeLayers)
+  const simulationData = useGlobeStore(s => s.simulationData)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -67,12 +67,24 @@ export default function GlobeViewer() {
       ctx.arc(centerX, centerY, radius * 1.2, 0, Math.PI * 2)
       ctx.fill()
 
-      // Draw data points based on backend data
+      // Map backend impactSeries into a simple impact map at the current timestep
+      const impacts: Record<string, number> = {}
+      if (simulationData) {
+        const series = simulationData.impactSeries || {}
+        Object.keys(series).forEach((key) => {
+          const arr = series[key] || []
+          if (arr.length) {
+            impacts[key] = Math.max(0, Math.min(1, arr[arr.length - 1]))
+          }
+        })
+      }
+
+      // Draw data points based on backend node ids
       const points = [
         { x: centerX - radius * 0.3, y: centerY - radius * 0.2, layer: 'weather', color: '#60A5FA', backendKey: 'rotterdam' },
         { x: centerX + radius * 0.2, y: centerY - radius * 0.1, layer: 'ports', color: '#10B981', backendKey: 'rotterdam' },
         { x: centerX - radius * 0.1, y: centerY + radius * 0.2, layer: 'grid', color: '#F59E0B', backendKey: 'eu_central' },
-        { x: centerX + radius * 0.3, y: centerY + radius * 0.1, layer: 'alerts', color: '#EF4444', backendKey: 'rotterdam' }
+        { x: centerX + radius * 0.3, y: centerY + radius * 0.1, layer: 'alerts', color: '#EF4444', backendKey: 'suez_canal' }
       ]
 
       points.forEach(point => {
@@ -101,7 +113,7 @@ export default function GlobeViewer() {
       ctx.fillStyle = planet === 'earth' ? '#3B82F6' : '#EF4444'
       ctx.font = 'bold 16px Arial'
       ctx.textAlign = 'center'
-      ctx.fillText(planet === 'earth' ? '🌍 Earth' : '🪐 Mars', centerX, centerY + radius + 30)
+      ctx.fillText(planet === 'earth' ? 'Earth' : 'Mars', centerX, centerY + radius + 30)
     }
 
     drawGlobe()

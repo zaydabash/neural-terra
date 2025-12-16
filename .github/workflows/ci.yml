@@ -33,6 +33,7 @@ jobs:
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install -r apps/backend/requirements.txt || true
-      - name: Smoke
-        run: python -c "print('backend ready')"
+          pip install -r apps/backend/requirements.txt
+      - name: Run backend tests
+        working-directory: apps/backend
+        run: pytest -q

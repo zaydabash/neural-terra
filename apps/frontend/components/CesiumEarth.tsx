@@ -184,11 +184,11 @@ export default function CesiumEarth({ currentPlanet, activeLayers, impacts, onSc
       
       {/* Status overlay */}
       <div className="absolute top-4 left-4 bg-green-800/90 text-green-200 px-3 py-1 rounded text-sm">
-        ✅ CesiumJS Active
+        CesiumJS Active
       </div>
       
       <div className="absolute top-4 right-4 bg-blue-800/90 text-blue-200 px-3 py-1 rounded text-sm">
-        {currentPlanet === 'earth' ? '🌍 Earth' : '🪐 Mars'}
+        {currentPlanet === 'earth' ? 'Earth' : 'Mars'}
       </div>
     </div>
   )

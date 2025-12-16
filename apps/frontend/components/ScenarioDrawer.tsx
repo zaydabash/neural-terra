@@ -89,7 +89,7 @@ export default function ScenarioDrawer() {
 
   const handleRunScenario = async (scenarioId: string, comingSoon: boolean = false) => {
     if (comingSoon) {
-      alert('🚀 Mars Mode scenarios coming in Neural Terra v2.0!\n\nExperience the future of planetary simulation with terraforming, colony planning, and ecosystem design.')
+      alert('Mars Mode scenarios are coming in Neural Terra v2.0.\n\nTerraforming, colony planning, and ecosystem design are planned but not implemented yet.')
       return
     }
     

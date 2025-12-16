@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useGlobeStore } from '@/lib/store'
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react'
 
@@ -10,7 +10,8 @@ export default function Timeline() {
     simulationDuration, 
     isPlaying, 
     setCurrentTime,
-    togglePlayback 
+    togglePlayback,
+    advanceTime,
   } = useGlobeStore()
 
   const [scrubPosition, setScrubPosition] = useState(0)
@@ -30,6 +31,15 @@ export default function Timeline() {
       return `${days}d ${Math.round(remainingHours)}h`
     }
   }
+
+  // Simple playback loop: advance one hour every 200ms while playing
+  useEffect(() => {
+    if (!isPlaying) return
+    const id = setInterval(() => {
+      advanceTime()
+    }, 200)
+    return () => clearInterval(id)
+  }, [isPlaying, advanceTime])
 
   return (
     <div className="absolute bottom-4 left-4 right-4 bg-gray-800/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
