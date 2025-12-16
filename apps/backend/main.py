@@ -19,7 +19,10 @@ from nl import NLEngine
 from schemas import Shock, SimulationResult, NLQuery, NLResponse
 
 # Load environment variables
-load_dotenv()
+# Load environment variables from root
+root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+dotenv_path = os.path.join(root_dir, '.env')
+load_dotenv(dotenv_path)
 
 app = FastAPI(
     title="Neural Terra API",
@@ -135,12 +138,15 @@ async def run_nl_query(query: NLQuery) -> NLResponse:
 async def get_mars_grid_layer():
     """Get Mars grid layer data"""
     try:
-        import json
-        import os
-        mars_grid_path = os.path.join(os.path.dirname(__file__), "../../data/mars_snapshots/mars_grid.json")
-        with open(mars_grid_path, "r") as f:
-            data = json.load(f)
-        return data
+        # Load all grid data and filter for Mars
+        # Note: In a real app, we'd pass planet to the agent
+        data = grid_agent.load_data()
+        if not data.empty and 'planet' in data.columns:
+            mars_data = data[data['planet'] == 'mars']
+            return mars_data.to_dict('records')
+        
+        # Fallback if planet column missing (shouldn't happen with new code)
+        return []
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Mars grid data error: {str(e)}")
 
@@ -148,12 +154,11 @@ async def get_mars_grid_layer():
 async def get_mars_ports_layer():
     """Get Mars ports layer data"""
     try:
-        import json
-        import os
-        mars_ports_path = os.path.join(os.path.dirname(__file__), "../../data/mars_snapshots/mars_ports.json")
-        with open(mars_ports_path, "r") as f:
-            data = json.load(f)
-        return data
+        data = ports_agent.load_data()
+        if not data.empty and 'planet' in data.columns:
+            mars_data = data[data['planet'] == 'mars']
+            return mars_data.to_dict('records')
+        return []
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Mars ports data error: {str(e)}")
 
@@ -161,12 +166,9 @@ async def get_mars_ports_layer():
 async def get_mars_alerts():
     """Get Mars alerts data"""
     try:
-        import json
-        import os
-        mars_alerts_path = os.path.join(os.path.dirname(__file__), "../../data/mars_snapshots/mars_alerts.json")
-        with open(mars_alerts_path, "r") as f:
-            data = json.load(f)
-        return data
+        # Alerts agent might not be unified yet, but let's try to use it or return empty
+        # For now, return empty as we haven't unified alerts yet
+        return []
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Mars alerts data error: {str(e)}")
 
@@ -174,24 +176,7 @@ async def get_mars_alerts():
 async def get_mars_graph():
     """Get Mars simulation graph structure"""
     try:
-        # Create Mars-specific graph data
-        mars_graph = {
-            "nodes": [
-                {"id": "colony_alpha", "name": "Colony Alpha", "type": "colony", "lat": 18.4, "lon": 77.5},
-                {"id": "colony_bravo", "name": "Colony Bravo", "type": "colony", "lat": -14.6, "lon": 175.5},
-                {"id": "oxygen_grid", "name": "Oxygen Grid", "type": "life_support", "lat": 0.0, "lon": 0.0},
-                {"id": "water_plant", "name": "Water Plant", "type": "life_support", "lat": 25.0, "lon": 310.0},
-                {"id": "launch_pad", "name": "Launch Pad", "type": "transport", "lat": 0.0, "lon": 0.0},
-            ],
-            "edges": [
-                {"source": "oxygen_grid", "target": "colony_alpha", "weight": 0.8, "delay_hours": 0, "decay": 0.1},
-                {"source": "oxygen_grid", "target": "colony_bravo", "weight": 0.7, "delay_hours": 0, "decay": 0.1},
-                {"source": "water_plant", "target": "oxygen_grid", "weight": 0.6, "delay_hours": 2, "decay": 0.05},
-                {"source": "launch_pad", "target": "colony_alpha", "weight": 0.5, "delay_hours": 6, "decay": 0.1},
-                {"source": "launch_pad", "target": "colony_bravo", "weight": 0.4, "delay_hours": 8, "decay": 0.1},
-            ]
-        }
-        return mars_graph
+        return ripple_engine.get_graph_data(planet='mars')
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Mars graph data error: {str(e)}")
 

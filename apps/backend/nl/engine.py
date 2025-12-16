@@ -4,47 +4,95 @@ from datetime import datetime, timedelta
 from schemas import Shock, NLQuery, NLInterpretation, NLResponse, SimulationResult
 from sim import RippleEngine
 
+import re
+import os
+import json
+from typing import Dict, List, Optional, Tuple, Any
+from datetime import datetime, timedelta
+import google.generativeai as genai
+from schemas import Shock, NLQuery, NLInterpretation, NLResponse, SimulationResult
+from sim import RippleEngine
+
 class NLEngine:
     """Natural language processing engine for scenario interpretation"""
     
     def __init__(self, ripple_engine: RippleEngine):
         self.ripple_engine = ripple_engine
+        self.api_key = os.getenv("GEMINI_API_KEY")
+        if self.api_key:
+            genai.configure(api_key=self.api_key)
+            self.model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # Keep aliases for fallback
         self.asset_aliases = self._build_asset_aliases()
         self.region_aliases = self._build_region_aliases()
     
-    def _build_asset_aliases(self) -> Dict[str, str]:
-        """Build mapping of natural language terms to asset IDs"""
-        return {
-            'panama': 'panama_canal',
-            'panama canal': 'panama_canal',
-            'suez': 'suez_canal',
-            'suez canal': 'suez_canal',
-            'los angeles': 'los_angeles',
-            'la port': 'los_angeles',
-            'rotterdam': 'rotterdam',
-            'singapore': 'singapore',
-            'us grid': 'us_east',
-            'european grid': 'eu_central',
-            'china grid': 'china_east',
-        }
-    
-    def _build_region_aliases(self) -> Dict[str, str]:
-        """Build mapping of natural language terms to region IDs"""
-        return {
-            'north america': 'na',
-            'america': 'na',
-            'usa': 'na',
-            'us': 'na',
-            'europe': 'eu',
-            'asia': 'as',
-            'china': 'as',
-            'africa': 'af',
-            'oceania': 'oc',
-            'australia': 'oc',
-        }
-    
     def interpret(self, query: NLQuery) -> NLInterpretation:
         """Interpret natural language query into structured scenario"""
+        if self.api_key:
+            try:
+                return self._interpret_llm(query)
+            except Exception as e:
+                print(f"LLM interpretation failed: {e}. Falling back to regex.")
+                return self._interpret_regex(query)
+        else:
+            return self._interpret_regex(query)
+
+    def _interpret_llm(self, query: NLQuery) -> NLInterpretation:
+        """Interpret query using Gemini"""
+        # Get available nodes for context
+        graph_data = self.ripple_engine.get_graph_data(planet='earth') # Default to earth context
+        nodes = [f"{n['name']} (id: {n['id']})" for n in graph_data['nodes']]
+        nodes_list = "\n".join(nodes)
+        
+        prompt = f"""
+        You are an AI assistant for a planetary simulation engine.
+        Your task is to interpret a user's natural language query and convert it into a structured simulation scenario (Shock).
+        
+        Available Nodes in the Simulation:
+        {nodes_list}
+        
+        User Query: "{query.text}"
+        
+        Extract the following fields:
+        1. target_ids: List of node IDs that are the targets of the shock. Map the user's intent to the closest available node IDs.
+        2. magnitude: A float between 0.0 and 1.0 representing the intensity of the shock (1.0 = total failure/shutdown, 0.1 = minor disruption).
+        3. duration_hours: Integer representing duration in hours.
+        4. description: A brief summary of the action.
+        
+        Return ONLY a JSON object with these fields. Do not include markdown formatting.
+        Example JSON:
+        {{
+            "target_ids": ["suez_canal"],
+            "magnitude": 0.5,
+            "duration_hours": 48,
+            "description": "Simulate 50% slowdown of Suez Canal for 48 hours"
+        }}
+        """
+        
+        response = self.model.generate_content(prompt)
+        text = response.text.strip()
+        # Clean markdown if present
+        if text.startswith("```json"):
+            text = text[7:-3]
+        
+        data = json.loads(text)
+        
+        scenario_spec = Shock(
+            target_ids=data.get("target_ids", []),
+            magnitude=float(data.get("magnitude", 0.5)),
+            duration_hours=int(data.get("duration_hours", 24)),
+            start_ts=datetime.now()
+        )
+        
+        return NLInterpretation(
+            scenario_spec=scenario_spec,
+            queries=[data.get("description", query.text)],
+            confidence=0.95
+        )
+
+    def _interpret_regex(self, query: NLQuery) -> NLInterpretation:
+        """Interpret natural language query using regex (Fallback)"""
         text = query.text.lower()
         
         # Extract scenario components
@@ -82,6 +130,37 @@ class NLEngine:
             confidence=confidence
         )
     
+    def _build_asset_aliases(self) -> Dict[str, str]:
+        """Build mapping of natural language terms to asset IDs"""
+        return {
+            'panama': 'panama_canal',
+            'panama canal': 'panama_canal',
+            'suez': 'suez_canal',
+            'suez canal': 'suez_canal',
+            'los angeles': 'los_angeles',
+            'la port': 'los_angeles',
+            'rotterdam': 'rotterdam',
+            'singapore': 'singapore',
+            'us grid': 'us_east',
+            'european grid': 'eu_central',
+            'china grid': 'china_east',
+        }
+    
+    def _build_region_aliases(self) -> Dict[str, str]:
+        """Build mapping of natural language terms to region IDs"""
+        return {
+            'north america': 'na',
+            'america': 'na',
+            'usa': 'na',
+            'us': 'na',
+            'europe': 'eu',
+            'asia': 'as',
+            'china': 'as',
+            'africa': 'af',
+            'oceania': 'oc',
+            'australia': 'oc',
+        }
+
     def _extract_targets(self, text: str) -> List[str]:
         """Extract target assets/regions from text"""
         targets = []

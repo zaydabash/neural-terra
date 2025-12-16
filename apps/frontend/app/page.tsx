@@ -2,7 +2,7 @@
 
 import StatusBar from '@/components/StatusBar'
 import ControlPanel from '@/components/ControlPanel'
-import GlobeViewer from '@/components/GlobeViewer'
+import CesiumEarth from '@/components/CesiumEarth'
 import ScenarioDrawer from '@/components/ScenarioDrawer'
 import Timeline from '@/components/Timeline'
 import NLCommandBar from '@/components/NLCommandBar'
@@ -25,7 +25,7 @@ export default function Home() {
 
       {/* Globe Visualization */}
       <div className="absolute inset-0 pt-12">
-        <GlobeViewer />
+        <CesiumEarth />
       </div>
 
       {/* Scenario drawer, timeline, and NL command bar */}

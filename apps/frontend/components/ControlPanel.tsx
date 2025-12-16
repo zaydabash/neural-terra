@@ -23,22 +23,20 @@ export default function ControlPanel() {
         <div className="flex space-x-2">
           <button
             onClick={() => setPlanet('earth')}
-            className={`flex-1 px-4 py-2 rounded-lg transition-colors text-sm ${
-              planet === 'earth' 
-                ? 'bg-blue-500 text-white' 
+            className={`flex-1 px-4 py-2 rounded-lg transition-colors text-sm ${planet === 'earth'
+                ? 'bg-blue-500 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-            >
+              }`}
+          >
             Earth
           </button>
           <button
             onClick={() => setPlanet('mars')}
-            className={`flex-1 px-4 py-2 rounded-lg transition-colors text-sm ${
-              planet === 'mars' 
-                ? 'bg-red-500 text-white' 
+            className={`flex-1 px-4 py-2 rounded-lg transition-colors text-sm ${planet === 'mars'
+                ? 'bg-red-500 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-            >
+              }`}
+          >
             Mars
           </button>
         </div>
@@ -50,54 +48,47 @@ export default function ControlPanel() {
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => toggleLayer('weather')}
-            className={`p-3 rounded-lg transition-colors text-sm ${
-              active.weather 
-                ? 'bg-blue-500 text-white' 
+            className={`p-3 rounded-lg transition-colors text-sm ${active.weather
+                ? 'bg-blue-500 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-              >
-                Weather {active.weather ? 'ON' : 'OFF'}
+              }`}
+          >
+            Weather {active.weather ? 'ON' : 'OFF'}
           </button>
           <button
             onClick={() => toggleLayer('ports')}
-            className={`p-3 rounded-lg transition-colors text-sm ${
-              active.ports 
-                ? 'bg-green-500 text-white' 
+            className={`p-3 rounded-lg transition-colors text-sm ${active.ports
+                ? 'bg-green-500 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-              >
-                Ports {active.ports ? 'ON' : 'OFF'}
+              }`}
+          >
+            Ports {active.ports ? 'ON' : 'OFF'}
           </button>
           <button
             onClick={() => toggleLayer('grid')}
-            className={`p-3 rounded-lg transition-colors text-sm ${
-              active.grid 
-                ? 'bg-yellow-500 text-white' 
+            className={`p-3 rounded-lg transition-colors text-sm ${active.grid
+                ? 'bg-yellow-500 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-              >
-                Grid {active.grid ? 'ON' : 'OFF'}
+              }`}
+          >
+            Grid {active.grid ? 'ON' : 'OFF'}
           </button>
           <button
             onClick={() => toggleLayer('alerts')}
-            className={`p-3 rounded-lg transition-colors text-sm ${
-              active.alerts 
-                ? 'bg-red-500 text-white' 
+            className={`p-3 rounded-lg transition-colors text-sm ${active.alerts
+                ? 'bg-red-500 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-              >
-                Alerts {active.alerts ? 'ON' : 'OFF'}
+              }`}
+          >
+            Alerts {active.alerts ? 'ON' : 'OFF'}
           </button>
         </div>
       </div>
 
-      {/* Scenario Button */}
-      <button
-        onClick={() => runScenario('suez_disruption')}
-        className="w-full bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
-      >
-        Run Suez-like Scenario
-      </button>
+      {/* Scenario Button - Removed in favor of NL Interface */}
+      <div className="text-xs text-gray-500 text-center mt-4">
+        Use the command bar below to run simulations.
+      </div>
     </div>
   )
 }

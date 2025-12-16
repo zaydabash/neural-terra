@@ -8,108 +8,38 @@ class GridAgent(AgentBase):
     """Agent for power grid data"""
     
     def fetch_live(self) -> pd.DataFrame:
-        """Fetch live grid data (placeholder for real API)"""
-        # In a real implementation, this might call grid operators' APIs
-        # For now, return static grid data
-        return self.load_snapshot()
+        """Fetch live grid data"""
+        # In a real implementation, this would call grid APIs
+        # For now, we load from our unified world graph
+        return self._load_from_graph()
     
     def load_snapshot(self) -> pd.DataFrame:
-        """Load grid snapshot from file"""
-        snapshot_path = Path("data/snapshots/grid_sample.json")
-        if snapshot_path.exists():
-            with open(snapshot_path, 'r') as f:
+        """Load grid snapshot"""
+        return self._load_from_graph()
+        
+    def _load_from_graph(self) -> pd.DataFrame:
+        """Load grid nodes from world_nodes.json"""
+        try:
+            with open("data/world_nodes.json", "r") as f:
                 data = json.load(f)
-            return pd.DataFrame(data)
-        
-        # Generate sample data if snapshot doesn't exist
-        return self._generate_sample_grid()
-    
-    def _generate_sample_grid(self) -> pd.DataFrame:
-        """Generate sample power grid data"""
-        grid_data = [
-            {
-                'id': 'us_east',
-                'name': 'US Eastern Interconnection',
-                'region': 'North America',
-                'capacity_mw': 500000,
-                'load_mw': 420000,
-                'stress_index': 0.84
-            },
-            {
-                'id': 'us_west',
-                'name': 'US Western Interconnection',
-                'region': 'North America',
-                'capacity_mw': 200000,
-                'load_mw': 180000,
-                'stress_index': 0.90
-            },
-            {
-                'id': 'eu_central',
-                'name': 'European Continental Grid',
-                'region': 'Europe',
-                'capacity_mw': 400000,
-                'load_mw': 350000,
-                'stress_index': 0.875
-            },
-            {
-                'id': 'eu_north',
-                'name': 'Nordic Grid',
-                'region': 'Europe',
-                'capacity_mw': 80000,
-                'load_mw': 65000,
-                'stress_index': 0.81
-            },
-            {
-                'id': 'china_east',
-                'name': 'China Eastern Grid',
-                'region': 'Asia',
-                'capacity_mw': 600000,
-                'load_mw': 520000,
-                'stress_index': 0.87
-            },
-            {
-                'id': 'china_west',
-                'name': 'China Western Grid',
-                'region': 'Asia',
-                'capacity_mw': 300000,
-                'load_mw': 250000,
-                'stress_index': 0.83
-            },
-            {
-                'id': 'india_north',
-                'name': 'Northern Regional Grid',
-                'region': 'Asia',
-                'capacity_mw': 150000,
-                'load_mw': 140000,
-                'stress_index': 0.93
-            },
-            {
-                'id': 'india_south',
-                'name': 'Southern Regional Grid',
-                'region': 'Asia',
-                'capacity_mw': 120000,
-                'load_mw': 110000,
-                'stress_index': 0.92
-            },
-            {
-                'id': 'japan',
-                'name': 'Japan Grid',
-                'region': 'Asia',
-                'capacity_mw': 200000,
-                'load_mw': 180000,
-                'stress_index': 0.90
-            },
-            {
-                'id': 'australia',
-                'name': 'Australian National Grid',
-                'region': 'Oceania',
-                'capacity_mw': 50000,
-                'load_mw': 42000,
-                'stress_index': 0.84
-            }
-        ]
-        
-        return pd.DataFrame(grid_data)
+            
+            grids = [
+                n for n in data.get("nodes", []) 
+                if n.get("type") == "asset" and n.get("asset_type") == "grid"
+            ]
+            
+            # Add derived fields expected by frontend
+            for g in grids:
+                capacity = g.get('capacity', 100000)
+                g['capacity_mw'] = capacity
+                g['load_mw'] = capacity * 0.8 # Synthetic load
+                g['stress_index'] = 0.85 # Synthetic stress
+                g['region'] = g.get('region_id', 'Unknown') # Map region_id to name if needed
+            
+            return pd.DataFrame(grids)
+        except Exception as e:
+            print(f"Failed to load grid from graph: {e}")
+            return pd.DataFrame()
     
     def normalize(self, data: pd.DataFrame) -> pd.DataFrame:
         """Normalize grid data to standard schema"""

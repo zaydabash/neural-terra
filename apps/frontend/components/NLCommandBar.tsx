@@ -8,6 +8,7 @@ export default function NLCommandBar() {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const { runNLQuery } = useGlobeStore()
 
   // Keyboard shortcut
@@ -35,8 +36,9 @@ export default function NLCommandBar() {
       await runNLQuery(query)
       setQuery('')
       setIsOpen(false)
-    } catch (error) {
+    } catch (error: any) {
       console.error('NL query failed:', error)
+      setError('Failed to process query. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -79,10 +81,18 @@ export default function NLCommandBar() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3 bg-red-900/50 border border-red-700 rounded text-red-200 text-sm">
+                    {error}
+                  </div>
+                )}
                 <div className="relative">
                   <textarea
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={(e) => {
+                      setQuery(e.target.value)
+                      if (error) setError(null)
+                    }}
                     placeholder="Ask Neural Terra anything... e.g., 'Simulate 30% slowdown in Panama Canal for 7 days'"
                     className="w-full h-24 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neural-blue resize-none"
                     autoFocus

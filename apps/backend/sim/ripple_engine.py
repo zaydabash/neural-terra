@@ -41,39 +41,67 @@ class RippleEngine:
         self._build_minimal_world()
     
     def _build_minimal_world(self):
-        """Build a minimal world graph with regions and assets"""
+        """Build world graph from data file"""
+        data_path = Path("data/world_nodes.json")
+        if not data_path.exists():
+            self._build_fallback_world()
+            return
+
+        with open(data_path, 'r') as f:
+            world_data = json.load(f)
+
+        # Add nodes
+        for node_data in world_data.get('nodes', []):
+            planet = node_data.get('planet', 'earth')
+            
+            if node_data['type'] == 'region':
+                node = RegionNode(
+                    node_id=node_data['id'],
+                    name=node_data['name'],
+                    region=node_data['name'],
+                    lat=node_data['lat'],
+                    lon=node_data['lon']
+                )
+                node.planet = planet # Attach planet to node object
+                self.add_region_node(node)
+            elif node_data['type'] == 'asset':
+                node = AssetNode(
+                    node_id=node_data['id'],
+                    name=node_data['name'],
+                    asset_type=node_data['asset_type'],
+                    region_id=node_data['region_id'],
+                    lat=node_data['lat'],
+                    lon=node_data['lon'],
+                    capacity=node_data.get('capacity', 1.0)
+                )
+                node.planet = planet
+                self.add_asset_node(node)
+
+        # Add edges
+        for edge in world_data.get('edges', []):
+            if edge['source'] in self.nodes and edge['target'] in self.nodes:
+                self.graph.add_edge(
+                    edge['source'], 
+                    edge['target'], 
+                    weight=edge['weight'],
+                    delay_hours=edge['delay_hours'],
+                    decay=edge['decay']
+                )
+    def _build_fallback_world(self):
+        """Minimal fallback if data file is missing"""
         # Add major regions
         regions = [
             RegionNode("na", "North America", "North America", 45.0, -100.0),
-            RegionNode("sa", "South America", "South America", -15.0, -60.0),
             RegionNode("eu", "Europe", "Europe", 50.0, 10.0),
-            RegionNode("af", "Africa", "Africa", 0.0, 20.0),
             RegionNode("as", "Asia", "Asia", 35.0, 100.0),
-            RegionNode("oc", "Oceania", "Oceania", -25.0, 140.0),
         ]
-        
         for region in regions:
             self.add_region_node(region)
-        
-        # Add major assets
-        assets = [
-            AssetNode("panama_canal", "Panama Canal", "port", "na", 9.0765, -79.6555, 0.95),
-            AssetNode("suez_canal", "Suez Canal", "port", "af", 30.5852, 32.2650, 0.90),
-            AssetNode("los_angeles", "Port of Los Angeles", "port", "na", 33.7175, -118.2728, 0.85),
-            AssetNode("rotterdam", "Port of Rotterdam", "port", "eu", 51.9225, 4.4792, 0.88),
-            AssetNode("singapore", "Port of Singapore", "port", "as", 1.2966, 103.7764, 0.92),
-            AssetNode("us_east", "US Eastern Grid", "grid", "na", 40.0, -80.0, 500000),
-            AssetNode("us_west", "US Western Grid", "grid", "na", 35.0, -120.0, 200000),
-            AssetNode("eu_central", "European Grid", "grid", "eu", 50.0, 10.0, 400000),
-            AssetNode("china_east", "China Eastern Grid", "grid", "as", 35.0, 120.0, 600000),
-        ]
-        
-        for asset in assets:
-            self.add_asset_node(asset)
-        
-        # Add trade/energy coupling edges
-        self._add_coupling_edges()
-    
+            
+        # Add minimal coupling
+        self.graph.add_edge("na", "eu", weight=0.5, delay_hours=24, decay=0.1)
+        self.graph.add_edge("eu", "as", weight=0.5, delay_hours=24, decay=0.1)
+
     def add_region_node(self, region: RegionNode):
         """Add a region node to the graph"""
         self.graph.add_node(region.id, node_type="region", data=region)
@@ -87,34 +115,6 @@ class RippleEngine:
         # Connect asset to its region
         if asset.region_id in self.nodes:
             self.graph.add_edge(asset.id, asset.region_id, weight=0.8, delay_hours=0, decay=0.1)
-    
-    def _add_coupling_edges(self):
-        """Add trade and energy coupling between regions"""
-        # Trade coupling (bidirectional)
-        trade_couplings = [
-            ("na", "eu", 0.6),  # Trans-Atlantic trade
-            ("na", "as", 0.5),  # Trans-Pacific trade
-            ("eu", "as", 0.4),  # Europe-Asia trade
-            ("as", "oc", 0.3),  # Asia-Oceania trade
-            ("na", "sa", 0.4),  # North-South America trade
-            ("eu", "af", 0.3),  # Europe-Africa trade
-        ]
-        
-        for region1, region2, weight in trade_couplings:
-            if region1 in self.nodes and region2 in self.nodes:
-                self.graph.add_edge(region1, region2, weight=weight, delay_hours=24, decay=0.05)
-                self.graph.add_edge(region2, region1, weight=weight, delay_hours=24, decay=0.05)
-        
-        # Energy coupling (unidirectional, from producers to consumers)
-        energy_couplings = [
-            ("as", "na", 0.3),  # Asia exports energy to NA
-            ("as", "eu", 0.2),  # Asia exports energy to EU
-            ("na", "sa", 0.2),  # NA exports energy to SA
-        ]
-        
-        for producer, consumer, weight in energy_couplings:
-            if producer in self.nodes and consumer in self.nodes:
-                self.graph.add_edge(producer, consumer, weight=weight, delay_hours=12, decay=0.1)
     
     def simulate_shock(self, shock: Shock) -> SimulationResult:
         """Simulate the ripple effects of a shock"""
@@ -234,32 +234,40 @@ class RippleEngine:
             kpis=data['kpis'],
             duration_hours=data['duration_hours']
         )
-    
-    def get_graph_data(self) -> Dict[str, Any]:
-        """Get graph structure for visualization"""
+    def get_graph_data(self, planet: str = 'earth') -> Dict[str, Any]:
+        """Get graph structure for visualization, filtered by planet"""
         nodes = []
         edges = []
         
+        # Filter nodes by planet
+        valid_nodes = set()
         for node_id, node_data in self.graph.nodes(data=True):
             node = node_data['data']
-            nodes.append({
-                'id': node_id,
-                'name': node.name,
-                'type': node_data['node_type'],
-                'lat': getattr(node, 'lat', 0),
-                'lon': getattr(node, 'lon', 0),
-                'region': getattr(node, 'region', ''),
-                'asset_type': getattr(node, 'asset_type', ''),
-                'capacity': getattr(node, 'capacity', 1.0)
-            })
+            node_planet = getattr(node, 'planet', 'earth')
+            
+            if node_planet == planet:
+                valid_nodes.add(node_id)
+                nodes.append({
+                    'id': node_id,
+                    'name': node.name,
+                    'type': node_data['node_type'],
+                    'lat': getattr(node, 'lat', 0),
+                    'lon': getattr(node, 'lon', 0),
+                    'region': getattr(node, 'region', ''),
+                    'asset_type': getattr(node, 'asset_type', ''),
+                    'capacity': getattr(node, 'capacity', 1.0),
+                    'planet': node_planet
+                })
         
+        # Filter edges where both source and target are on the planet
         for source, target, edge_data in self.graph.edges(data=True):
-            edges.append({
-                'source': source,
-                'target': target,
-                'weight': edge_data.get('weight', 0.0),
-                'delay_hours': edge_data.get('delay_hours', 0),
-                'decay': edge_data.get('decay', 0.1)
-            })
+            if source in valid_nodes and target in valid_nodes:
+                edges.append({
+                    'source': source,
+                    'target': target,
+                    'weight': edge_data.get('weight', 0.0),
+                    'delay_hours': edge_data.get('delay_hours', 0),
+                    'decay': edge_data.get('decay', 0.1)
+                })
         
         return {'nodes': nodes, 'edges': edges}

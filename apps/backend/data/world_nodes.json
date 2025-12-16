@@ -1,0 +1,507 @@
+{
+  "nodes": [
+    {
+      "id": "suez_canal",
+      "name": "Suez Canal",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 30.5852,
+      "lon": 32.2650,
+      "region_id": "af",
+      "capacity": 0.9,
+      "planet": "earth"
+    },
+    {
+      "id": "panama_canal",
+      "name": "Panama Canal",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 9.0765,
+      "lon": -79.6555,
+      "region_id": "na",
+      "capacity": 0.95,
+      "planet": "earth"
+    },
+    {
+      "id": "los_angeles",
+      "name": "Port of Los Angeles",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 33.7175,
+      "lon": -118.2728,
+      "region_id": "na",
+      "capacity": 0.85,
+      "planet": "earth"
+    },
+    {
+      "id": "long_beach",
+      "name": "Port of Long Beach",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 33.7701,
+      "lon": -118.1937,
+      "region_id": "na",
+      "capacity": 0.80,
+      "planet": "earth"
+    },
+    {
+      "id": "rotterdam",
+      "name": "Port of Rotterdam",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 51.9225,
+      "lon": 4.4792,
+      "region_id": "eu",
+      "capacity": 0.88,
+      "planet": "earth"
+    },
+    {
+      "id": "antwerp",
+      "name": "Port of Antwerp",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 51.2194,
+      "lon": 4.4025,
+      "region_id": "eu",
+      "capacity": 0.78,
+      "planet": "earth"
+    },
+    {
+      "id": "singapore",
+      "name": "Port of Singapore",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 1.2966,
+      "lon": 103.7764,
+      "region_id": "as",
+      "capacity": 0.92,
+      "planet": "earth"
+    },
+    {
+      "id": "shanghai",
+      "name": "Port of Shanghai",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 31.2304,
+      "lon": 121.4737,
+      "region_id": "as",
+      "capacity": 0.95,
+      "planet": "earth"
+    },
+    {
+      "id": "hamburg",
+      "name": "Port of Hamburg",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 53.5511,
+      "lon": 9.9937,
+      "region_id": "eu",
+      "capacity": 0.85,
+      "planet": "earth"
+    },
+    {
+      "id": "new_york",
+      "name": "Port of New York",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 40.7128,
+      "lon": -74.0060,
+      "region_id": "na",
+      "capacity": 0.88,
+      "planet": "earth"
+    },
+    {
+      "id": "dubai",
+      "name": "Jebel Ali Port",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 25.0113,
+      "lon": 55.0612,
+      "region_id": "as",
+      "capacity": 0.90,
+      "planet": "earth"
+    },
+    {
+      "id": "tokyo",
+      "name": "Port of Tokyo",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 35.6895,
+      "lon": 139.6917,
+      "region_id": "as",
+      "capacity": 0.87,
+      "planet": "earth"
+    },
+    {
+      "id": "busan",
+      "name": "Port of Busan",
+      "type": "asset",
+      "asset_type": "port",
+      "lat": 35.1796,
+      "lon": 129.0756,
+      "region_id": "as",
+      "capacity": 0.82,
+      "planet": "earth"
+    },
+    {
+      "id": "us_east",
+      "name": "US Eastern Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 40.0,
+      "lon": -80.0,
+      "region_id": "na",
+      "capacity": 500000,
+      "planet": "earth"
+    },
+    {
+      "id": "us_west",
+      "name": "US Western Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 35.0,
+      "lon": -120.0,
+      "region_id": "na",
+      "capacity": 200000,
+      "planet": "earth"
+    },
+    {
+      "id": "eu_central",
+      "name": "European Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 50.0,
+      "lon": 10.0,
+      "region_id": "eu",
+      "capacity": 400000,
+      "planet": "earth"
+    },
+    {
+      "id": "eu_north",
+      "name": "Nordic Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 60.0,
+      "lon": 15.0,
+      "region_id": "eu",
+      "capacity": 80000,
+      "planet": "earth"
+    },
+    {
+      "id": "china_east",
+      "name": "China Eastern Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 35.0,
+      "lon": 120.0,
+      "region_id": "as",
+      "capacity": 600000,
+      "planet": "earth"
+    },
+    {
+      "id": "china_west",
+      "name": "China Western Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 40.0,
+      "lon": 90.0,
+      "region_id": "as",
+      "capacity": 300000,
+      "planet": "earth"
+    },
+    {
+      "id": "india_north",
+      "name": "India Northern Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 28.0,
+      "lon": 77.0,
+      "region_id": "as",
+      "capacity": 300000,
+      "planet": "earth"
+    },
+    {
+      "id": "india_south",
+      "name": "India Southern Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 12.0,
+      "lon": 78.0,
+      "region_id": "as",
+      "capacity": 120000,
+      "planet": "earth"
+    },
+    {
+      "id": "brazil_south",
+      "name": "Brazil South Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": -23.0,
+      "lon": -46.0,
+      "region_id": "sa",
+      "capacity": 250000,
+      "planet": "earth"
+    },
+    {
+      "id": "japan",
+      "name": "Japan Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": 36.0,
+      "lon": 138.0,
+      "region_id": "as",
+      "capacity": 200000,
+      "planet": "earth"
+    },
+    {
+      "id": "australia",
+      "name": "Australian Grid",
+      "type": "asset",
+      "asset_type": "grid",
+      "lat": -25.0,
+      "lon": 135.0,
+      "region_id": "oc",
+      "capacity": 50000,
+      "planet": "earth"
+    },
+    {
+      "id": "na",
+      "name": "North America",
+      "type": "region",
+      "lat": 45.0,
+      "lon": -100.0,
+      "planet": "earth"
+    },
+    {
+      "id": "sa",
+      "name": "South America",
+      "type": "region",
+      "lat": -15.0,
+      "lon": -60.0,
+      "planet": "earth"
+    },
+    {
+      "id": "eu",
+      "name": "Europe",
+      "type": "region",
+      "lat": 50.0,
+      "lon": 10.0,
+      "planet": "earth"
+    },
+    {
+      "id": "af",
+      "name": "Africa",
+      "type": "region",
+      "lat": 0.0,
+      "lon": 20.0,
+      "planet": "earth"
+    },
+    {
+      "id": "as",
+      "name": "Asia",
+      "type": "region",
+      "lat": 35.0,
+      "lon": 100.0,
+      "planet": "earth"
+    },
+    {
+      "id": "oc",
+      "name": "Oceania",
+      "type": "region",
+      "lat": -25.0,
+      "lon": 140.0,
+      "planet": "earth"
+    },
+    {
+      "id": "colony_alpha",
+      "name": "Colony Alpha",
+      "type": "asset",
+      "asset_type": "colony",
+      "lat": 18.4,
+      "lon": 77.5,
+      "region_id": "mars_eq",
+      "capacity": 1.0,
+      "planet": "mars"
+    },
+    {
+      "id": "colony_bravo",
+      "name": "Colony Bravo",
+      "type": "asset",
+      "asset_type": "colony",
+      "lat": -14.6,
+      "lon": 175.5,
+      "region_id": "mars_eq",
+      "capacity": 1.0,
+      "planet": "mars"
+    },
+    {
+      "id": "oxygen_grid",
+      "name": "Oxygen Grid",
+      "type": "asset",
+      "asset_type": "life_support",
+      "lat": 0.0,
+      "lon": 0.0,
+      "region_id": "mars_eq",
+      "capacity": 1.0,
+      "planet": "mars"
+    },
+    {
+      "id": "water_plant",
+      "name": "Water Plant",
+      "type": "asset",
+      "asset_type": "life_support",
+      "lat": 25.0,
+      "lon": 310.0,
+      "region_id": "mars_eq",
+      "capacity": 1.0,
+      "planet": "mars"
+    },
+    {
+      "id": "launch_pad",
+      "name": "Launch Pad",
+      "type": "asset",
+      "asset_type": "transport",
+      "lat": 5.0,
+      "lon": 10.0,
+      "region_id": "mars_eq",
+      "capacity": 1.0,
+      "planet": "mars"
+    },
+    {
+      "id": "mars_eq",
+      "name": "Mars Equatorial",
+      "type": "region",
+      "lat": 0.0,
+      "lon": 0.0,
+      "planet": "mars"
+    }
+  ],
+  "edges": [
+    {
+      "source": "na",
+      "target": "eu",
+      "weight": 0.6,
+      "delay_hours": 24,
+      "decay": 0.05
+    },
+    {
+      "source": "eu",
+      "target": "na",
+      "weight": 0.6,
+      "delay_hours": 24,
+      "decay": 0.05
+    },
+    {
+      "source": "na",
+      "target": "as",
+      "weight": 0.5,
+      "delay_hours": 36,
+      "decay": 0.05
+    },
+    {
+      "source": "as",
+      "target": "na",
+      "weight": 0.5,
+      "delay_hours": 36,
+      "decay": 0.05
+    },
+    {
+      "source": "eu",
+      "target": "as",
+      "weight": 0.4,
+      "delay_hours": 30,
+      "decay": 0.05
+    },
+    {
+      "source": "as",
+      "target": "eu",
+      "weight": 0.4,
+      "delay_hours": 30,
+      "decay": 0.05
+    },
+    {
+      "source": "as",
+      "target": "oc",
+      "weight": 0.3,
+      "delay_hours": 12,
+      "decay": 0.05
+    },
+    {
+      "source": "oc",
+      "target": "as",
+      "weight": 0.3,
+      "delay_hours": 12,
+      "decay": 0.05
+    },
+    {
+      "source": "shanghai",
+      "target": "los_angeles",
+      "weight": 0.8,
+      "delay_hours": 240,
+      "decay": 0.01
+    },
+    {
+      "source": "singapore",
+      "target": "rotterdam",
+      "weight": 0.7,
+      "delay_hours": 300,
+      "decay": 0.01
+    },
+    {
+      "source": "suez_canal",
+      "target": "rotterdam",
+      "weight": 0.9,
+      "delay_hours": 100,
+      "decay": 0.01
+    },
+    {
+      "source": "panama_canal",
+      "target": "new_york",
+      "weight": 0.8,
+      "delay_hours": 72,
+      "decay": 0.01
+    },
+    {
+      "source": "dubai",
+      "target": "singapore",
+      "weight": 0.6,
+      "delay_hours": 96,
+      "decay": 0.01
+    },
+    {
+      "source": "oxygen_grid",
+      "target": "colony_alpha",
+      "weight": 0.8,
+      "delay_hours": 0,
+      "decay": 0.1
+    },
+    {
+      "source": "oxygen_grid",
+      "target": "colony_bravo",
+      "weight": 0.7,
+      "delay_hours": 0,
+      "decay": 0.1
+    },
+    {
+      "source": "water_plant",
+      "target": "oxygen_grid",
+      "weight": 0.6,
+      "delay_hours": 2,
+      "decay": 0.05
+    },
+    {
+      "source": "launch_pad",
+      "target": "colony_alpha",
+      "weight": 0.5,
+      "delay_hours": 6,
+      "decay": 0.1
+    },
+    {
+      "source": "launch_pad",
+      "target": "colony_bravo",
+      "weight": 0.4,
+      "delay_hours": 8,
+      "decay": 0.1
+    }
+  ]
+}

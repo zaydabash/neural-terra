@@ -44,6 +44,10 @@ interface GlobeStore {
   setCurrentTime: (time: number) => void
   resetSimulation: () => void
   advanceTime: () => void
+
+  // Graph state
+  graphData: { nodes: any[], edges: any[] } | null
+  fetchGraph: () => Promise<void>
 }
 
 export const useGlobeStore = create<GlobeStore>()(
@@ -55,14 +59,33 @@ export const useGlobeStore = create<GlobeStore>()(
 
       // Planet state
       currentPlanet: 'earth' as const,
-      setPlanet: (planet) => set({ currentPlanet: planet }),
+      setPlanet: (planet) => {
+        set({ currentPlanet: planet })
+        get().fetchGraph()
+      },
+
+      // Graph state
+      graphData: null,
+      fetchGraph: async () => {
+        try {
+          const planet = get().currentPlanet
+          const endpoint = planet === 'earth' ? '/api/graph' : '/api/mars/graph'
+          const response = await fetch(endpoint)
+          if (!response.ok) throw new Error('Failed to fetch graph')
+          const data = await response.json()
+          set({ graphData: data })
+        } catch (error) {
+          console.error('Graph fetch failed:', error)
+          set({ graphData: { nodes: [], edges: [] } })
+        }
+      },
 
       // Layer state
       activeLayers: {
         weather: true,
-        ports: false,
-        grid: false,
-        alerts: false,
+        ports: true,
+        grid: true,
+        alerts: true,
       },
       toggleLayer: (layer) =>
         set((state) => ({
