@@ -17,7 +17,14 @@ class WeatherAgent(AgentBase):
         # Note: In a real app we'd inject the graph or read the JSON. 
         # For now, we'll read the JSON directly to know where to query.
         try:
-            with open("data/world_nodes.json", "r") as f:
+            # Try relative to current working directory first (for CI)
+            data_path = Path("data/world_nodes.json")
+            if not data_path.exists():
+                # Fallback: relative to this file's parent's parent (backend directory)
+                backend_dir = Path(__file__).parent.parent
+                data_path = backend_dir / "data" / "world_nodes.json"
+            
+            with open(data_path, "r") as f:
                 world_data = json.load(f)
             
             nodes = world_data.get("nodes", [])
@@ -94,6 +101,9 @@ class WeatherAgent(AgentBase):
     
     def normalize(self, data: pd.DataFrame) -> pd.DataFrame:
         """Normalize weather data to standard schema"""
+        if data.empty:
+            return pd.DataFrame(columns=['lat', 'lon', 'temp_c', 'ts'])
+        
         required_cols = ['lat', 'lon', 'temp_c', 'ts']
         
         # Ensure all required columns exist

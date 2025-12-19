@@ -85,6 +85,9 @@ class AlertsAgent(AgentBase):
     
     def normalize(self, data: pd.DataFrame) -> pd.DataFrame:
         """Normalize alerts data to standard schema"""
+        if data.empty:
+            return pd.DataFrame(columns=['id', 'ts', 'title', 'summary', 'severity', 'tags', 'region_ids', 'asset_ids'])
+        
         required_cols = ['id', 'ts', 'title', 'summary', 'severity', 'tags', 'region_ids', 'asset_ids']
         
         # Ensure all required columns exist

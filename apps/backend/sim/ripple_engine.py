@@ -42,7 +42,13 @@ class RippleEngine:
     
     def _build_minimal_world(self):
         """Build world graph from data file"""
+        # Try relative to current working directory first (for CI)
         data_path = Path("data/world_nodes.json")
+        if not data_path.exists():
+            # Fallback: relative to this file's parent's parent (backend directory)
+            backend_dir = Path(__file__).parent.parent
+            data_path = backend_dir / "data" / "world_nodes.json"
+        
         if not data_path.exists():
             self._build_fallback_world()
             return
