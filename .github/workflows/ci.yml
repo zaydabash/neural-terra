@@ -14,11 +14,38 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: apps/frontend/package-lock.json
-      - name: Install deps
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install frontend deps
         run: cd apps/frontend && npm ci --prefer-offline --no-audit --no-fund
-      - name: Build
+      - name: Install backend deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r apps/backend/requirements.txt
+      - name: Start backend service
+        working-directory: apps/backend
+        run: |
+          uvicorn main:app --host 127.0.0.1 --port 8000 &
+          echo $! > backend.pid
+      - name: Wait for backend health
+        run: |
+          for i in {1..30}; do
+            if curl -f http://localhost:8000/healthz 2>/dev/null; then
+              echo "Backend is healthy"
+              exit 0
+            fi
+            echo "Waiting for backend... ($i/30)"
+            sleep 2
+          done
+          echo "Backend failed to start"
+          exit 1
+      - name: Build frontend
         env:
           NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_CESIUM_ION_TOKEN: ${{ secrets.CESIUM_ION_TOKEN }}
+          NEXT_PUBLIC_API_URL: http://localhost:8000
           CI: 1
         run: cd apps/frontend && npm run build
       - name: Install Playwright browsers
@@ -27,9 +54,17 @@ jobs:
       - name: Run frontend e2e test (vertical slice)
         env:
           NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_CESIUM_ION_TOKEN: ${{ secrets.CESIUM_ION_TOKEN }}
+          NEXT_PUBLIC_API_URL: http://localhost:8000
           CI: 1
         working-directory: apps/frontend
         run: npx playwright test
+      - name: Stop backend service
+        if: always()
+        run: |
+          if [ -f apps/backend/backend.pid ]; then
+            kill $(cat apps/backend/backend.pid) || true
+          fi
 
   backend:
     runs-on: ubuntu-latest

@@ -5,7 +5,7 @@ test.describe('Neural Terra vertical slice', () => {
     await page.goto('/')
 
     // Basic shell is visible
-    await expect(page.getByText('Neural Terra')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Neural Terra' })).toBeVisible()
     await expect(page.getByText('Earth Mode')).toBeVisible()
 
     // Open the scenarios drawer
