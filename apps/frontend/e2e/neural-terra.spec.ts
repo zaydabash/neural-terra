@@ -8,8 +8,11 @@ test.describe('Neural Terra vertical slice', () => {
     await expect(page.getByText('Neural Terra')).toBeVisible()
     await expect(page.getByText('Earth Mode')).toBeVisible()
 
-    // Run the main Suez-like scenario from the control panel
-    await page.getByRole('button', { name: 'Run Suez-like Scenario' }).click()
+    // Open the scenarios drawer
+    await page.getByRole('button', { name: 'Scenarios' }).click()
+
+    // Click on the Suez Canal Disruption scenario
+    await page.getByText('Suez Canal Disruption').click()
 
     // Wait for simulation results card to appear (either real backend or fallback)
     const results = page.getByTestId('simulation-results')
