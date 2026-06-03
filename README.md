@@ -12,6 +12,8 @@ An interactive digital twin of Earth for simulating events, predicting ripple ef
 
 [Live Demo](https://neural-terra-8fjvtnrm0-zs-projects-f6d2059b.vercel.app)
 
+![Neural Terra interface](docs/screenshot.png)
+
 </div>
 
 ## What It Is
