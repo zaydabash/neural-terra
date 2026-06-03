@@ -9,3 +9,17 @@ coverage/
 **/.DS_Store
 apps/**/node_modules/
 apps/**/.next/
+
+# Simulation run outputs (engine writes one JSON per /simulate call)
+apps/backend/scenarios/scenario_*.json
+
+# Build / tooling artifacts
+*.tsbuildinfo
+.cache/
+**/.pytest_cache/
+**/__pycache__/
+.gstack/
+
+# Playwright artifacts
+apps/frontend/playwright-report/
+apps/frontend/test-results/
