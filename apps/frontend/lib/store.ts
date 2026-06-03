@@ -1,5 +1,15 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
+import worldGraph from './worldGraph.json'
+
+type GraphData = { nodes: any[]; edges: any[] }
+
+// Bundled offline graph so the globe always renders nodes, even when no
+// backend is reachable (e.g. the hosted static demo).
+const FALLBACK_GRAPH: Record<'earth' | 'mars', GraphData> = worldGraph as Record<
+  'earth' | 'mars',
+  GraphData
+>
 
 export interface LayerState {
   weather: boolean
@@ -67,16 +77,18 @@ export const useGlobeStore = create<GlobeStore>()(
       // Graph state
       graphData: null,
       fetchGraph: async () => {
+        const planet = get().currentPlanet
         try {
-          const planet = get().currentPlanet
           const endpoint = planet === 'earth' ? '/api/graph' : '/api/mars/graph'
           const response = await fetch(endpoint)
           if (!response.ok) throw new Error('Failed to fetch graph')
           const data = await response.json()
-          set({ graphData: data })
+          // Guard against an empty/invalid payload, fall back to bundled graph.
+          if (!data?.nodes?.length) throw new Error('Empty graph payload')
+          set({ graphData: data, isConnected: true })
         } catch (error) {
-          console.error('Graph fetch failed:', error)
-          set({ graphData: { nodes: [], edges: [] } })
+          console.error('Graph fetch failed, using bundled offline graph:', error)
+          set({ graphData: FALLBACK_GRAPH[planet], isConnected: false })
         }
       },
 
@@ -139,18 +151,24 @@ export const useGlobeStore = create<GlobeStore>()(
         } catch (error) {
           console.error('Scenario execution failed:', error)
 
-          // Offline demo fallback: synthesize a simple impact pattern
-          const fallbackImpactSeries: Record<string, number[]> = {
-            suez_canal: Array.from({ length: 169 }, (_, i) =>
-              i === 0 ? 0 : Math.min(1, 0.4 + i * 0.003)
-            ),
-            rotterdam: Array.from({ length: 169 }, (_, i) =>
-              i === 0 ? 0 : Math.min(1, 0.3 + i * 0.0025)
-            ),
-            eu_central: Array.from({ length: 169 }, (_, i) =>
-              i === 0 ? 0 : Math.min(1, 0.25 + i * 0.002)
-            ),
-          }
+          // Offline demo fallback: synthesize a planet-appropriate pattern
+          const ramp = (base: number, slope: number) =>
+            Array.from({ length: 169 }, (_, i) =>
+              i === 0 ? 0 : Math.min(1, base + i * slope)
+            )
+
+          const fallbackImpactSeries: Record<string, number[]> =
+            get().currentPlanet === 'mars'
+              ? {
+                  oxygen_grid: ramp(0.5, 0.003),
+                  colony_alpha: ramp(0.35, 0.0028),
+                  colony_bravo: ramp(0.28, 0.0024),
+                }
+              : {
+                  suez_canal: ramp(0.4, 0.003),
+                  rotterdam: ramp(0.3, 0.0025),
+                  eu_central: ramp(0.25, 0.002),
+                }
 
           set({
             simulationData: {

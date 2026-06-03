@@ -5,33 +5,90 @@
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  
+
   body {
-    @apply bg-gray-900 text-white;
+    @apply bg-ink-950 text-slate-100;
+  }
+
+  /* Thin, on-theme scrollbars inside panels */
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+  }
+  .scroll-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.22);
+    border-radius: 9999px;
+  }
+  .scroll-thin::-webkit-scrollbar-track {
+    background: transparent;
   }
 }
 
 @layer components {
-  .globe-container {
-    @apply w-full h-full relative;
+  /* Frosted-glass surface used by every floating panel */
+  .glass {
+    @apply rounded-2xl border border-white/10 bg-ink-900/70 backdrop-blur-xl shadow-glass;
   }
-  
-  .control-panel {
-    @apply absolute top-4 left-4 bg-gray-800/90 backdrop-blur-sm rounded-lg p-4 shadow-lg;
+
+  .panel-label {
+    @apply text-[10px] font-semibold uppercase tracking-widest2 text-slate-400;
   }
-  
-  .layer-toggle {
-    @apply flex items-center space-x-2 p-2 rounded hover:bg-gray-700 transition-colors;
+
+  /* Segmented option base */
+  .seg-btn {
+    @apply relative z-10 flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors duration-200;
   }
-  
-  .scenario-button {
-    @apply px-4 py-2 bg-neural-blue hover:bg-blue-600 text-white rounded-lg transition-colors;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
-  
-  .ripple-effect {
-    @apply absolute rounded-full pointer-events-none;
-    animation: ripple 2s ease-out infinite;
-  }
+}
+
+/* ---- Range slider (timeline scrubber) ---- */
+.nt-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  outline: none;
+}
+.nt-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #e2f5ff;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 12px -1px rgba(56, 189, 248, 0.8);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+.nt-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+}
+.nt-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #e2f5ff;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 12px -1px rgba(56, 189, 248, 0.8);
+  cursor: pointer;
+}
+
+/* Subtle star specks for panel/edges */
+.starfield {
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.25), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(255, 255, 255, 0.18), transparent),
+    radial-gradient(1.5px 1.5px at 40% 80%, rgba(255, 255, 255, 0.15), transparent);
 }

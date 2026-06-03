@@ -10,25 +10,31 @@ import SimulationResults from '@/components/SimulationResults'
 
 export default function Home() {
   return (
-    <div className="w-full h-screen bg-gray-900 relative overflow-hidden">
-      <StatusBar />
-
-      {/* Control Panel */}
-      <div className="absolute left-4 top-16 w-80 z-20">
-        <ControlPanel />
-      </div>
-
-      {/* Simulation results */}
-      <div className="absolute right-4 top-16 w-80 z-20">
-        <SimulationResults />
-      </div>
-
-      {/* Globe Visualization */}
-      <div className="absolute inset-0 pt-12">
+    <div className="relative h-screen w-full overflow-hidden bg-ink-950 text-slate-100">
+      {/* Globe (hero layer) */}
+      <div className="absolute inset-0">
         <CesiumEarth />
       </div>
 
-      {/* Scenario drawer, timeline, and NL command bar */}
+      {/* Ambient lighting so glass panels read against the globe */}
+      <div className="pointer-events-none absolute inset-0 z-[5] bg-vignette" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-48 bg-gradient-to-t from-ink-950/80 to-transparent" />
+
+      {/* HUD */}
+      <StatusBar />
+
+      <div className="pointer-events-none absolute left-4 top-20 z-20 w-[19rem]">
+        <div className="pointer-events-auto animate-slide-up">
+          <ControlPanel />
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute right-4 top-20 z-20 w-[19rem]">
+        <div className="pointer-events-auto animate-slide-up [animation-delay:80ms]">
+          <SimulationResults />
+        </div>
+      </div>
+
       <ScenarioDrawer />
       <Timeline />
       <NLCommandBar />

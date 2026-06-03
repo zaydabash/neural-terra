@@ -8,14 +8,9 @@ const nextConfig = {
     }
     return config
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://127.0.0.1:8000/:path*',
-      },
-    ]
-  },
+  // All /api/* paths are handled by explicit Next route handlers
+  // (app/api/**/route.ts), which proxy to NEXT_PUBLIC_API_URL and fall back
+  // to bundled offline data. No hardcoded backend rewrite needed.
 }
 
 module.exports = nextConfig

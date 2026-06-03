@@ -5,6 +5,8 @@ import { useGlobeStore } from '@/lib/store'
 export default function CesiumEarth() {
   const viewerRef = useRef<any>(null)
   const cesiumRef = useRef<any>(null)
+  const marsLayerRef = useRef<any>(null)
+  const earthLayerRef = useRef<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isViewerReady, setIsViewerReady] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -155,13 +157,34 @@ export default function CesiumEarth() {
       })
     }
 
+    const isMars = planet === 'mars'
+
     if (graphData.nodes) {
       graphData.nodes.forEach((node: any) => {
         let shouldDraw = false
         let color = Cesium.Color.WHITE
         let size = 10
 
-        if (node.asset_type === 'port' && active.ports) {
+        if (isMars) {
+          // Mars infrastructure: colonies, life-support, transport
+          if (node.asset_type === 'colony') {
+            shouldDraw = true
+            color = Cesium.Color.fromCssColorString('#f87171')
+            size = 18
+          } else if (node.asset_type === 'life_support') {
+            shouldDraw = true
+            color = Cesium.Color.fromCssColorString('#22d3ee')
+            size = 15
+          } else if (node.asset_type === 'transport') {
+            shouldDraw = true
+            color = Cesium.Color.fromCssColorString('#fbbf24')
+            size = 14
+          } else if (node.type === 'asset') {
+            shouldDraw = true
+            color = Cesium.Color.fromCssColorString('#fb923c')
+            size = 12
+          }
+        } else if (node.asset_type === 'port' && active.ports) {
           shouldDraw = true
           color = Cesium.Color.fromCssColorString('#10B981')
           size = 15
@@ -169,7 +192,7 @@ export default function CesiumEarth() {
           shouldDraw = true
           color = Cesium.Color.fromCssColorString('#F59E0B')
           size = 12
-        } else if ((node.type === 'colony' || node.type === 'life_support')) {
+        } else if (node.type === 'colony' || node.type === 'life_support') {
           shouldDraw = true
           color = Cesium.Color.fromCssColorString('#EF4444')
           size = 20
@@ -223,14 +246,57 @@ export default function CesiumEarth() {
       })
     }
 
-    // Handle planet switch visual
-    if (planet === 'mars') {
-      viewer.scene.skyAtmosphere.hueShift = 0.6
-      viewer.scene.skyAtmosphere.saturationShift = 0.5
-    } else {
-      viewer.scene.skyAtmosphere.hueShift = 0.0
-      viewer.scene.skyAtmosphere.saturationShift = 0.0
+    // Handle planet switch visual: imagery, base color, atmosphere.
+    // Capture the Earth base layer once, and lazily add the Mars layer the
+    // first time Mars is selected (by which point Cesium's async base layer
+    // has resolved to index 0).
+    if (!earthLayerRef.current && viewer.imageryLayers.length > 0) {
+      earthLayerRef.current = viewer.imageryLayers.get(0)
     }
+
+    if (planet === 'mars' && !marsLayerRef.current) {
+      try {
+        const marsProvider = new Cesium.WebMapTileServiceImageryProvider({
+          url: 'https://trek.nasa.gov/tiles/Mars/EQ/Mars_Viking_MDIM21_ClrMosaic_global_232m/1.0.0/default/default028mm/{TileMatrix}/{TileRow}/{TileCol}.jpg',
+          layer: 'Mars_Viking_MDIM21_ClrMosaic_global_232m',
+          style: 'default',
+          tileMatrixSetID: 'default028mm',
+          maximumLevel: 7,
+          tilingScheme: new Cesium.GeographicTilingScheme(),
+          credit: 'NASA / JPL / USGS / Mars Trek',
+        })
+        const marsLayer = viewer.imageryLayers.addImageryProvider(marsProvider)
+        marsLayer.show = false
+        marsLayerRef.current = marsLayer
+      } catch (e) {
+        console.warn('Cesium: Failed to add Mars imagery layer', e)
+      }
+    }
+
+    const earthLayer = earthLayerRef.current
+    const marsLayer = marsLayerRef.current
+
+    if (planet === 'mars') {
+      if (earthLayer) earthLayer.show = false
+      if (marsLayer) marsLayer.show = true
+      // Rust base shows through wherever Mars tiles haven't loaded
+      viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#9a4a2b')
+      if (viewer.scene.skyAtmosphere) {
+        viewer.scene.skyAtmosphere.hueShift = -0.35
+        viewer.scene.skyAtmosphere.saturationShift = 0.35
+        viewer.scene.skyAtmosphere.brightnessShift = -0.05
+      }
+    } else {
+      if (earthLayer) earthLayer.show = true
+      if (marsLayer) marsLayer.show = false
+      viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1020')
+      if (viewer.scene.skyAtmosphere) {
+        viewer.scene.skyAtmosphere.hueShift = 0.0
+        viewer.scene.skyAtmosphere.saturationShift = 0.0
+        viewer.scene.skyAtmosphere.brightnessShift = 0.0
+      }
+    }
+    viewer.scene.requestRender()
 
   }, [graphData, active, simulationData, planet, isViewerReady, currentTime])
 
@@ -252,7 +318,7 @@ export default function CesiumEarth() {
         <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm text-white z-10">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-            <div className="text-lg font-semibold mb-2">Loading Real Earth...</div>
+            <div className="text-lg font-semibold mb-2">Initializing globe…</div>
           </div>
         </div>
       )}

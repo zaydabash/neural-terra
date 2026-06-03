@@ -25,6 +25,19 @@ export async function POST(request: NextRequest) {
         magnitude: 1.0,
         duration_hours: 24,
         start_ts: new Date().toISOString()
+      },
+      // Mars scenarios (shared ripple engine, Mars node IDs)
+      'oxygen_grid_failure': {
+        target_ids: ['oxygen_grid'],
+        magnitude: 0.5,
+        duration_hours: 48,
+        start_ts: new Date().toISOString()
+      },
+      'launch_delay': {
+        target_ids: ['launch_pad'],
+        magnitude: 0.6,
+        duration_hours: 12,
+        start_ts: new Date().toISOString()
       }
     }
 

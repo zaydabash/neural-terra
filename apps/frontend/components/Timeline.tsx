@@ -2,108 +2,126 @@
 
 import { useState, useEffect } from 'react'
 import { useGlobeStore } from '@/lib/store'
-import { Play, Pause, SkipBack, SkipForward } from 'lucide-react'
+import { Play, Pause, SkipBack, SkipForward, RotateCcw } from 'lucide-react'
+
+const SPEEDS = [0.5, 1, 2, 5] as const
 
 export default function Timeline() {
-  const { 
-    currentTime, 
-    simulationDuration, 
-    isPlaying, 
+  const {
+    currentTime,
+    simulationDuration,
+    isPlaying,
+    simulationData,
     setCurrentTime,
     togglePlayback,
     advanceTime,
+    resetSimulation,
   } = useGlobeStore()
 
-  const [scrubPosition, setScrubPosition] = useState(0)
-
-  const handleScrub = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const position = parseFloat(e.target.value)
-    setScrubPosition(position)
-    setCurrentTime(position)
-  }
+  const [speed, setSpeed] = useState<number>(1)
 
   const formatTime = (hours: number) => {
-    if (hours < 24) {
-      return `${Math.round(hours)}h`
-    } else {
-      const days = Math.floor(hours / 24)
-      const remainingHours = hours % 24
-      return `${days}d ${Math.round(remainingHours)}h`
-    }
+    if (hours < 24) return `${Math.round(hours)}h`
+    const days = Math.floor(hours / 24)
+    const remainingHours = Math.round(hours % 24)
+    return `${days}d ${remainingHours}h`
   }
 
-  // Simple playback loop: advance one hour every 200ms while playing
+  // Playback loop. Interval scales with the selected speed.
   useEffect(() => {
     if (!isPlaying) return
-    const id = setInterval(() => {
-      advanceTime()
-    }, 200)
+    const id = setInterval(() => advanceTime(), Math.max(40, 200 / speed))
     return () => clearInterval(id)
-  }, [isPlaying, advanceTime])
+  }, [isPlaying, advanceTime, speed])
+
+  const progress = simulationDuration > 0 ? (currentTime / simulationDuration) * 100 : 0
+  const disabled = !simulationData
 
   return (
-    <div className="absolute bottom-4 left-4 right-4 bg-gray-800/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
-      <div className="flex items-center space-x-4">
-        {/* Playback Controls */}
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => setCurrentTime(Math.max(0, currentTime - 1))}
-            className="p-2 hover:bg-gray-700 rounded transition-colors"
-          >
-            <SkipBack className="w-4 h-4 text-gray-400" />
-          </button>
-          
-          <button
-            onClick={togglePlayback}
-            className="p-2 bg-neural-blue hover:bg-blue-600 rounded transition-colors"
-          >
-            {isPlaying ? (
-              <Pause className="w-4 h-4 text-white" />
-            ) : (
-              <Play className="w-4 h-4 text-white" />
-            )}
-          </button>
-          
-          <button
-            onClick={() => setCurrentTime(Math.min(simulationDuration, currentTime + 1))}
-            className="p-2 hover:bg-gray-700 rounded transition-colors"
-          >
-            <SkipForward className="w-4 h-4 text-gray-400" />
-          </button>
-        </div>
+    <div className="absolute bottom-4 left-1/2 z-20 w-[min(680px,calc(100%-2rem))] -translate-x-1/2">
+      <div className="glass animate-slide-up px-4 py-3 [animation-delay:120ms]">
+        <div className="flex items-center gap-4">
+          {/* Transport */}
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setCurrentTime(Math.max(0, currentTime - 1))}
+              disabled={disabled}
+              className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition-colors hover:bg-white/5 hover:text-white disabled:opacity-30"
+              title="Step back"
+            >
+              <SkipBack className="h-4 w-4" />
+            </button>
 
-        {/* Timeline Scrubber */}
-        <div className="flex-1">
-          <div className="flex items-center space-x-2">
-            <span className="text-xs text-gray-400 w-12">
+            <button
+              onClick={togglePlayback}
+              disabled={disabled}
+              className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 text-ink-950 shadow-glow-blue transition-transform hover:scale-105 disabled:from-slate-600 disabled:to-slate-700 disabled:text-slate-400 disabled:shadow-none"
+              title={isPlaying ? 'Pause' : 'Play'}
+            >
+              {isPlaying ? (
+                <Pause className="h-4 w-4" fill="currentColor" />
+              ) : (
+                <Play className="h-4 w-4 translate-x-px" fill="currentColor" />
+              )}
+            </button>
+
+            <button
+              onClick={() => setCurrentTime(Math.min(simulationDuration, currentTime + 1))}
+              disabled={disabled}
+              className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition-colors hover:bg-white/5 hover:text-white disabled:opacity-30"
+              title="Step forward"
+            >
+              <SkipForward className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Scrubber */}
+          <div className="flex flex-1 items-center gap-3">
+            <span className="w-12 text-right font-mono text-[11px] text-slate-300">
               {formatTime(currentTime)}
             </span>
-            
             <input
               type="range"
-              min="0"
+              min={0}
               max={simulationDuration}
-              step="0.1"
+              step={0.1}
               value={currentTime}
-              onChange={handleScrub}
-              className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+              disabled={disabled}
+              onChange={(e) => setCurrentTime(parseFloat(e.target.value))}
+              className="nt-slider flex-1 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              style={{
+                background: `linear-gradient(to right, #38bdf8 ${progress}%, rgba(148,163,184,0.18) ${progress}%)`,
+              }}
             />
-            
-            <span className="text-xs text-gray-400 w-12">
+            <span className="w-12 font-mono text-[11px] text-slate-500">
               {formatTime(simulationDuration)}
             </span>
           </div>
-        </div>
 
-        {/* Speed Control */}
-        <div className="flex items-center space-x-2">
-          <span className="text-xs text-gray-400">Speed:</span>
-          <select className="px-2 py-1 bg-gray-700 text-white text-xs rounded border border-gray-600">
-            <option value="0.5">0.5x</option>
-            <option value="1">1x</option>
-            <option value="2">2x</option>
-            <option value="5">5x</option>
-          </select>
+          {/* Speed + reset */}
+          <div className="flex items-center gap-1">
+            {SPEEDS.map((s) => (
+              <button
+                key={s}
+                onClick={() => setSpeed(s)}
+                className={`rounded-md px-1.5 py-1 font-mono text-[11px] transition-colors ${
+                  speed === s
+                    ? 'bg-sky-500/20 text-sky-300'
+                    : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                {s}x
+              </button>
+            ))}
+            <button
+              onClick={resetSimulation}
+              disabled={disabled}
+              className="ml-1 grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition-colors hover:bg-white/5 hover:text-white disabled:opacity-30"
+              title="Reset"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
