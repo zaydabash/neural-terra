@@ -100,20 +100,28 @@ class NLEngine:
         magnitude = self._extract_magnitude(text)
         duration = self._extract_duration(text)
         action = self._extract_action(text)
-        
+
         # Build scenario specification
         scenario_spec = None
         queries = []
         confidence = 0.0
-        
-        if targets and magnitude is not None and duration is not None:
+
+        if targets:
+            # Infer sensible defaults when the user doesn't state them
+            # explicitly (e.g. "LA port shuts down" implies full closure).
+            inferred = magnitude is None or duration is None
+            if magnitude is None:
+                magnitude = self._infer_magnitude(action)
+            if duration is None:
+                duration = 24
+
             scenario_spec = Shock(
                 target_ids=targets,
                 magnitude=magnitude,
                 duration_hours=duration,
                 start_ts=datetime.now()
             )
-            confidence = 0.8
+            confidence = 0.65 if inferred else 0.8
             queries.append(f"Simulate {action} of {', '.join(targets)} by {magnitude*100:.0f}% for {duration} hours")
         else:
             # Try to extract other types of queries
@@ -270,7 +278,8 @@ class NLEngine:
     
     def _extract_action(self, text: str) -> str:
         """Extract action type from text"""
-        if 'shutdown' in text or 'close' in text:
+        if ('shutdown' in text or 'shut down' in text or 'shuts down' in text
+                or 'close' in text or 'closure' in text or 'closes' in text):
             return 'shutdown'
         elif 'slowdown' in text or 'slow' in text:
             return 'slowdown'
@@ -280,6 +289,16 @@ class NLEngine:
             return 'failure'
         else:
             return 'disruption'
+
+    def _infer_magnitude(self, action: str) -> float:
+        """Infer a sensible shock magnitude from the action verb when the
+        user did not state an explicit percentage."""
+        return {
+            'shutdown': 1.0,
+            'failure': 0.8,
+            'disruption': 0.5,
+            'slowdown': 0.4,
+        }.get(action, 0.5)
     
     def run_query(self, query: NLQuery) -> NLResponse:
         """Run natural language query and return results"""

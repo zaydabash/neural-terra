@@ -149,8 +149,12 @@ class RippleEngine:
                     delay_hours = edge_data.get('delay_hours', 0)
                     decay = edge_data.get('decay', 0.1)
                     
-                    # Get impact from predecessor at appropriate delay
-                    delay_timestep = max(0, t - delay_hours)
+                    # Get impact from predecessor at the appropriate delay.
+                    # Read from the PREVIOUS completed step (t-1) shifted by the
+                    # delay, so propagation is independent of node iteration
+                    # order. (Reading index t directly fails for delay-0 edges
+                    # whose predecessor is updated later in the same step.)
+                    delay_timestep = max(0, t - 1 - delay_hours)
                     if delay_timestep < len(impact_series[predecessor]):
                         delayed_impact = impact_series[predecessor][delay_timestep]
                         incoming_impact += delayed_impact * weight * np.exp(-decay * t)
